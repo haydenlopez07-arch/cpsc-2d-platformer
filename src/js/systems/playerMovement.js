@@ -3,6 +3,19 @@ const ctx = canvas.getContext("2d");
 let gameState = "playing";
 let lastTime = 0; // Stores previous timestamp
 
+// Sprite sheet
+const spriteSheet = new Image();
+spriteSheet.src = "./src/assets/sprites/player/main_character/SpriteSheet/spritesheetmcwalkrun.png";
+
+// Animator (Spritesheet width / 2)
+const animator = new Animator(spriteSheet, 48, 48);
+
+// Add animations
+animator.addAnimation("idle right", [0]);
+animator.addAnimation("idle left", [1]);
+animator.addAnimation("run right", [2, 3, 4, 5]);
+animator.addAnimation("run left", [6, 7, 8, 9]);
+
 const player = {
     x: 50,
     y: 400,
@@ -40,13 +53,22 @@ window.addEventListener("keyup", (e) => {
 function update(dt) {
   if (gameState !== "playing") return;
 
+  animator.update(dt);
+
   // default
   player.vx = 0;
   player.vy = 0;
 
   // horizontal
-  if (keys.left && !keys.right) player.vx = -player.velocity;
-  else if (keys.right && !keys.left) player.vx = player.velocity;
+  // horizontal - Fixed logic and added brackets
+    if (keys.left && !keys.right) {
+        player.vx = -player.velocity; 
+        player.lastDir = "left"; 
+    } 
+    else if (keys.right && !keys.left) {
+        player.vx = player.velocity; 
+        player.lastDir = "right"; 
+    }
 
   // vertical (optional for testing)
   if (keys.up && !keys.down) player.vy = -player.velocity;
@@ -55,6 +77,17 @@ function update(dt) {
   // Apply motion
   player.x += player.vx * dt;
   player.y += player.vy * dt;
+
+  // Animations
+    if (player.vx !== 0 || player.vy !== 0) {
+      if (player.lastDir === "left") animator.setAnimation("run left");
+      else animator.setAnimation("run right");
+  } else {
+      // If stopped, use last direction to pick the correct idle frame
+      if (player.lastDir === "left") animator.setAnimation("idle left");
+      else animator.setAnimation("idle right");
+  }
+
 
   // Clamp to screen
   if (player.x < 0) player.x = 0;
@@ -68,10 +101,13 @@ function render() {
 
     ctx.fillStyle = `rgb(${bg}, ${bg},${bg})`
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = "black";
-
-    ctx.fillRect(player.x, player.y, player.w, player.h);
+    animator.draw(
+        ctx,
+        player.x,
+        player.y,
+        player.w,
+        player.h
+    );
 }
 
 function loop(timestamp) {
@@ -87,4 +123,5 @@ function loop(timestamp) {
 
 // Start loop
 requestAnimationFrame(loop);
+
 
