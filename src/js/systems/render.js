@@ -4,6 +4,9 @@ import { player, animator } from "./playerMovement.js";
 export const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
+const floor = new Image();
+floor.src = "../../src/assets/sprites/tiles/temp-floor.png"
+
 /* Canvas resize */
 
 function resizeCanvas() {
@@ -61,10 +64,15 @@ function drawMap() {
             if (tile === 0) ctx.fillStyle = "#90d7f380";
             if (tile === 1) ctx.fillStyle = "#2b4f81";
             if (tile === 2) ctx.fillStyle = "#1a2f5a";
-            if (tile === 3) ctx.fillStyle = "#3b7d2a";
+            // if (tile === 3) ctx.fillStyle = "#3b7d2a";
             if (tile === 4) ctx.fillStyle = "#5a3c1a";
 
             ctx.fillRect(tileX, tileY, tileSize, tileSize);
+
+            // drawImage(image, dx, dy, dWidth, dHeight), d = destination
+            // has to be below .fillRect or that will screw up the image
+            // should change this later but this is just temporary 
+            if (tile === 3) ctx.drawImage(floor, tileX, tileY, tileSize, tileSize)
         }
     }
 }
