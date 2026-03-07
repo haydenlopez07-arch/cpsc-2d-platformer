@@ -1,9 +1,9 @@
 body {
     margin: 0;
     overflow: hidden;
-    background-image: url('../assets/backgrounds/sky.PNG');
-    background-size: cover;
-    background-position: center;
+    background-image: url('../assets/backgrounds/level1/mario-repeat-test.png');
+    /* background-size: cover; */
+    /* background-position: center; */
 }
 
 canvas {

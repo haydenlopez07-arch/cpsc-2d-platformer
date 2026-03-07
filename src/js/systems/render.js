@@ -5,6 +5,9 @@ import { player } from "../entities/player.js";
 export const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
+const bg_body = document.querySelector("body");
+let dx = 75;
+
 const floor = new Image();
 floor.src = "../../src/assets/sprites/tiles/temp-floor.png"
 
@@ -62,7 +65,8 @@ function drawMap() {
 
             const tile = map[y][x];
 
-            if (tile === 0) ctx.fillStyle = "#90d7f380";
+            ctx.fillStyle = "rgba(0,0,0,0)";
+            // if (tile === 0) ctx.fillStyle = "#90d7f380";
             if (tile === 1) ctx.fillStyle = "#2b4f81";
             if (tile === 2) ctx.fillStyle = "#1a2f5a";
             // if (tile === 3) ctx.fillStyle = "#3b7d2a";
@@ -78,9 +82,18 @@ function drawMap() {
     }
 }
 
+function moveClouds() {
+    bg_body.style.backgroundPosition = `${dx}% 40%`;
+    if (player.vx === 0) dx += 0;
+    else if (player.vx > 0) dx -= 1;
+    else if (player.vx < 0) dx += 1;
+}
+
 export function render() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    moveClouds();
 
     updateCamera();
     drawMap();
