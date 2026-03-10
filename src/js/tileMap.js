@@ -2,6 +2,24 @@ export const Mrows = 60;
 export const Mcols = 200;
 export const tileSize = 32;
 
+//4: dirt
+//3: grass
+//2: undecided
+//1: water
+//0: sky
+
+// Top left position in tile set
+export const tileLocation = {
+  tileSize: 16,
+  floors: [
+    [0,16],
+    [16,0],
+    [16,16],
+    [0,16]
+  ],
+  grass: [0,0]
+};
+
 export const map = Array.from({ length: Mrows }, () =>
   Array.from({ length: Mcols }, () => 0)
 );

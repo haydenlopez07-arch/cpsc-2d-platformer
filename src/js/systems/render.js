@@ -1,5 +1,6 @@
-import { Mrows, Mcols, tileSize, map } from "../tileMap.js";
+import { Mrows, Mcols, tileSize, map, tileLocation } from "../tileMap.js";
 import { animator } from "./playerMovement.js";
+import { coins } from "./coins.js";
 import { player } from "../entities/player.js";
 
 export const canvas = document.getElementById("game");
@@ -8,8 +9,15 @@ const ctx = canvas.getContext("2d");
 const bg_body = document.querySelector("body");
 let dx = 75;
 
-const floor = new Image();
-floor.src = "../../src/assets/sprites/tiles/temp-floor.png"
+const tileSet = new Image();
+tileSet.src = "../../src/assets/sprites/tiles/world_tileset.png";
+
+const ogSize = tileLocation.tileSize;
+const [gsx, gsy] = tileLocation.grass;
+
+/* Random number for dirt */
+const now = new Date();
+const rndNumber = now.getHours() * 439 + now.getMinutes() * 577 + now.getSeconds() * 727;
 
 /* Canvas resize */
 
@@ -70,14 +78,21 @@ function drawMap() {
             if (tile === 1) ctx.fillStyle = "#2b4f81";
             if (tile === 2) ctx.fillStyle = "#1a2f5a";
             // if (tile === 3) ctx.fillStyle = "#3b7d2a";
-            if (tile === 4) ctx.fillStyle = "#5a3c1a";
+            // if (tile === 4) ctx.fillStyle = "#5a3c1a";
 
             ctx.fillRect(tileX, tileY, tileSize, tileSize);
 
-            // drawImage(image, dx, dy, dWidth, dHeight), d = destination
-            // has to be below .fillRect or that will screw up the image
-            // should change this later but this is just temporary 
-            if (tile === 3) ctx.drawImage(floor, tileX, tileY, tileSize, tileSize)
+            // drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) s = source, d = destination
+            if (tile === 3) ctx.drawImage(tileSet, gsx, gsy, ogSize, ogSize, tileX, tileY, tileSize, tileSize);
+            
+            if (tile === 4) {
+                // "Random number generator" to pick from options of dirt
+                let i = (Math.ceil(Math.sqrt(x) * y *Math.pow(x,2) * y + rndNumber) % tileLocation.floors.length);
+
+                let [fsx, fsy] = tileLocation.floors[i];
+                ctx.drawImage(tileSet, fsx, fsy, ogSize, ogSize, tileX, tileY, tileSize, tileSize);
+            }
+   
         }
     }
 }
@@ -105,4 +120,13 @@ export function render() {
         player.w,
         player.h
     );
+
+    coins.forEach(coin => {
+        coin.draw(ctx, camera);
+        coin.checkCollision(player);
+        /* Could do ->
+        if (coin.checkCollision(player)) player.score++;
+        */
+    });
+
 }
