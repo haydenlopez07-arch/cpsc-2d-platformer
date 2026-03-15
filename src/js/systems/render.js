@@ -1,4 +1,4 @@
-import { Mrows, Mcols, tileSize, map, tileLocation } from "../tileMap.js";
+import { Mrows, Mcols, tileSize, map, tileLocation, makePlatform } from "../tileMap.js";
 import { animator } from "./playerMovement.js";
 import { coins } from "./coins.js";
 import { player } from "../entities/player.js";
@@ -105,9 +105,36 @@ function moveClouds() {
     else if (player.vx < 0) dx += 1;
 }
 
+
+let b = 5;
+let t = 11;
+let slow = 1;
+let swtchDown = false;
+
 export function render() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Cool way we can use makePlatform()
+    let prevB = b;
+    let prevT = t;
+    if (slow % 5 == 0) {
+        if (!swtchDown && t !== Mrows-3) {
+            b++;
+            t++;
+            if (t === Mrows-3) swtchDown = true;
+        } else if (swtchDown) {
+            b--;
+            t--;
+            if (b === 5) swtchDown = false;
+        }
+    }
+    // erase previous platform
+    makePlatform(prevB, prevT, 10, 10, 0);
+    // draw new platform
+    makePlatform(b, t, 10, 10, 4, 3);
+    slow++;
+
 
     moveClouds();
 

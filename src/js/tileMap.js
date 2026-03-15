@@ -53,8 +53,31 @@ for (let x = 55; x < 60; x++) map[Mrows - 20][x] = 4;
 for (let x = 165; x < 170; x++) map[Mrows - 22][x] = 4;
 
 /* --------- Testing horizontal collision ----------*/
-map[Mrows - 8][33] = 3;
-map[Mrows - 7][33] = 4;
-map[Mrows - 6][33] = 4;
-map[Mrows - 5][33] = 4;
-map[Mrows - 4][33] = 4;
+// map[Mrows - 8][33] = 3;
+// map[Mrows - 7][33] = 4;
+// map[Mrows - 6][33] = 4;
+// map[Mrows - 5][33] = 4;
+// map[Mrows - 4][33] = 4;
+makePlatform(4, 8, 33, 33, 4, 3); // same as above
+
+/* ---- WATER ------ */
+makePlatform(1, 4, 36, 44, 2, 1);
+
+// Functions to help make platform
+/**
+* Makes vertical platfrom
+* @param {*} bottom - Start position
+* @param {*} top - End position
+* @param {*} left - Left beginning position
+* @param {*} right - Right end position
+* @param {*} tile - Tile type
+* @param {*} topTile - Tile type for top tile, leave empty if you don't want a different type on top
+*/
+export function makePlatform(bottom, top, left, right, tile, topTile = tile) {
+  for (let d = left; d <= right; d++) {
+    for (let i = bottom; i < top; i++) {
+      map[Mrows - i][d] = tile;
+    }
+    map[Mrows - top][d] = topTile;
+  }
+}
