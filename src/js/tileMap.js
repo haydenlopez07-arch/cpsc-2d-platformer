@@ -2,11 +2,14 @@ export const Mrows = 60;
 export const Mcols = 200;
 export const tileSize = 32;
 
-//4: dirt
-//3: grass
-//2: undecided
-//1: water
-//0: sky
+// Tiles IDs used throughout the game
+export const TILE_SKY = 0;
+export const TILE_WATER = 1;
+export const TILE_WATER_DARK = 2; // previously undecided and able to be changed
+export const TILE_GRASS = 3;
+export const TILE_DIRT = 4;
+export const TILE_BOX = 5; // solid tile
+export const TILE_SPIKE = 6; // resets character to start
 
 // Top left position in tile set
 export const tileLocation = {
@@ -21,63 +24,58 @@ export const tileLocation = {
 };
 
 export const map = Array.from({ length: Mrows }, () =>
-  Array.from({ length: Mcols }, () => 0)
+  Array.from({ length: Mcols }, () => TILE_SKY)
 );
+
+export function createPlatform(row, startX, endX, tileType = TILE_GRASS) {
+  for (let x = startX; x < endX; x++) {
+    map[Mrows - row][x] = tileType;
+  }
+}
+
+export function createBox(row, startX, endX) {
+  for (let x = startX; x < endX; x++) {
+    map[Mrows - row][x] = TILE_BOX;
+  }
+}
+
+export function createSpikes(row, startX, endX) {
+  for (let x = startX; x < endX; x++) {
+    map[Mrows - row][x] = TILE_SPIKE;
+  }
+}
 
 /* ---------- FLOOR ---------- */
 
 for (let y = Mrows - 3; y < Mrows; y++) {
   for (let x = 0; x < Mcols; x++) {
-    map[y][x] = 4;
+    map[y][x] = TILE_DIRT;
   }
 }
 
 /* ---------- GRASS TOP ---------- */
 
 for (let x = 0; x < Mcols; x++) {
-  map[Mrows - 4][x] = 3;
+  map[Mrows - 4][x] = TILE_GRASS;
 }
 
 /* ---------- PLATFORMS ---------- */
 
-for (let x = 15; x < 25; x++) map[Mrows - 10][x] = 3;
-for (let x = 35; x < 50; x++) map[Mrows - 14][x] = 3;
-for (let x = 65; x < 80; x++) map[Mrows - 8][x] = 3;
-for (let x = 100; x < 115; x++) map[Mrows - 12][x] = 3;
-for (let x = 140; x < 160; x++) map[Mrows - 16][x] = 3;
-for (let x = 180; x < 195; x++) map[Mrows - 10][x] = 3;
+createPlatform(10, 15, 25);
+createPlatform(14, 35, 50);
+createPlatform(8, 65, 80);
+createPlatform(12, 100, 115);
+createPlatform(16, 140, 160);
+createPlatform(10, 180, 195);
 
 /* ---------- FLOATING BLOCKS ---------- */
 
-for (let x = 55; x < 60; x++) map[Mrows - 20][x] = 4;
-for (let x = 165; x < 170; x++) map[Mrows - 22][x] = 4;
+createBox(20, 55, 60);
+createBox(22, 165, 170);
+createBox(12, 167, 169);
+createBox(8, 122, 125);
 
-/* --------- Testing horizontal collision ----------*/
-// map[Mrows - 8][33] = 3;
-// map[Mrows - 7][33] = 4;
-// map[Mrows - 6][33] = 4;
-// map[Mrows - 5][33] = 4;
-// map[Mrows - 4][33] = 4;
-makePlatform(4, 8, 33, 33, 4, 3); // same as above
+/* -------- SPIKES -------- */
 
-/* ---- WATER ------ */
-makePlatform(1, 4, 36, 44, 2, 1);
-
-// Functions to help make platform
-/**
-* Makes vertical platfrom
-* @param {*} bottom - Start position
-* @param {*} top - End position
-* @param {*} left - Left beginning position
-* @param {*} right - Right end position
-* @param {*} tile - Tile type
-* @param {*} topTile - Tile type for top tile, leave empty if you don't want a different type on top
-*/
-export function makePlatform(bottom, top, left, right, tile, topTile = tile) {
-  for (let d = left; d <= right; d++) {
-    for (let i = bottom; i < top; i++) {
-      map[Mrows - i][d] = tile;
-    }
-    map[Mrows - top][d] = topTile;
-  }
-}
+createSpikes(4, 34, 38);
+createSpikes(4, 84, 92);

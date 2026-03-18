@@ -1,4 +1,8 @@
-import { Mrows, Mcols, tileSize, map, tileLocation, makePlatform } from "../tileMap.js";
+import {
+  Mrows, Mcols, tileSize, map, tileLocation, TILE_WATER, 
+  TILE_WATER_DARK, TILE_GRASS, TILE_DIRT, TILE_BOX, 
+  TILE_SPIKE 
+} from "../tileMap.js";
 import { animator } from "./playerMovement.js";
 import { coins } from "./coins.js";
 import { player } from "../entities/player.js";
@@ -58,10 +62,8 @@ function updateCamera() {
 /* Draw Map */
 
 function drawMap() {
-
     for (let y = 0; y < Mrows; y++) {
         for (let x = 0; x < Mcols; x++) {
-
             const tileX = x * tileSize - camera.x;
             const tileY = y * tileSize - camera.y;
 
@@ -75,25 +77,35 @@ function drawMap() {
             const tile = map[y][x];
 
             ctx.fillStyle = "rgba(0,0,0,0)";
-            // if (tile === 0) ctx.fillStyle = "#90d7f380";
-            if (tile === 1) ctx.fillStyle = "#2b4f81";
-            if (tile === 2) ctx.fillStyle = "#1a2f5a";
-            // if (tile === 3) ctx.fillStyle = "#3b7d2a";
-            // if (tile === 4) ctx.fillStyle = "#5a3c1a";
+            if (tile === TILE_WATER) ctx.fillStyle = "#2b4f81";
+            if (tile === TILE_WATER_DARK) ctx.fillStyle = "#1a2f5a";
 
             ctx.fillRect(tileX, tileY, tileSize, tileSize);
 
-            // drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) s = source, d = destination
-            if (tile === 3) ctx.drawImage(tileSet, gsx, gsy, ogSize, ogSize, tileX, tileY, tileSize, tileSize);
-            
-            if (tile === 4) {
-                // "Random number generator" to pick from options of dirt
-                let i = (Math.ceil(Math.sqrt(x) * y *Math.pow(x,2) * y + rndNumber) % tileLocation.floors.length);
+            if (tile === TILE_GRASS) {
+                ctx.drawImage(tileSet, gsx, gsy, ogSize, ogSize, tileX, tileY, tileSize, tileSize);
+            }
+
+            if (tile === TILE_DIRT) {
+                let i = (
+                    Math.ceil(Math.sqrt(x) * y * Math.pow(x, 2) * y + rndNumber) %
+                    tileLocation.floors.length
+                );
 
                 let [fsx, fsy] = tileLocation.floors[i];
                 ctx.drawImage(tileSet, fsx, fsy, ogSize, ogSize, tileX, tileY, tileSize, tileSize);
             }
-   
+
+            // Temporary Boxes and Spikes
+            if (tile === TILE_BOX) {
+                ctx.fillStyle = "#8b5a2b";
+                ctx.fillRect(tileX, tileY, tileSize, tileSize);
+            }
+
+            if (tile === TILE_SPIKE) {
+                ctx.fillStyle = "#c0392b";
+                ctx.fillRect(tileX, tileY, tileSize, tileSize);
+            }
         }
     }
 }
@@ -129,12 +141,6 @@ export function render() {
             if (b === 5) swtchDown = false;
         }
     }
-    // erase previous platform
-    makePlatform(prevB, prevT, 10, 10, 0);
-    // draw new platform
-    makePlatform(b, t, 10, 10, 4, 3);
-    slow++;
-
 
     moveClouds();
 
@@ -149,6 +155,13 @@ export function render() {
         player.w,
         player.h
     )
+    const playerCol = Math.floor(player.x / tileSize);
+    const playerRow = Mrows - Math.floor((player.y + player.h) / tileSize);
+
+    ctx.fillStyle = "white";
+    ctx.font = "20px Arial";
+    ctx.fillText(`x: ${player.x.toFixed(1)} y: ${player.y.toFixed(1)}`, 20, 30);
+    ctx.fillText(`col: ${playerCol} row: ${playerRow}`, 20, 55);
 
 
     animator.draw(
