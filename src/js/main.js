@@ -1,7 +1,7 @@
 import { checkHazard } from "./systems/mapCollision.js";
 import { playerMovement } from "./systems/playerMovement.js";
 import { render } from "./systems/render.js";
-import { coinAnimator } from "./systems/coins.js";
+import { updateCollectables } from "./collectables/updateCollectables.js";
 import { player } from "./entities/player.js";
 import { Enemy } from "./entities/enemy.js";
 
@@ -27,7 +27,7 @@ function loop(timestamp) {
     }
 
     checkHazard(player);
-    coinAnimator.update(dt); // Should make a file in the future that will hold all collectibles to not clutter up main.js.
+    updateCollectables(dt);
     render();
 
     requestAnimationFrame(loop);

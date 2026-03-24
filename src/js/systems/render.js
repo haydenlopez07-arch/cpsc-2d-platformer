@@ -4,7 +4,8 @@ import {
   TILE_SPIKE 
 } from "../tileMap.js";
 import { animator } from "./playerMovement.js";
-import { coins } from "./coins.js";
+import { coins } from "../collectables/coins.js";
+import { hearts } from "../collectables/hearts.js";
 import { player } from "../entities/player.js";
 import { enemies } from "../main.js";
 
@@ -183,6 +184,11 @@ export function render() {
         /* Could do ->
         if (coin.checkCollision(player)) player.score++;
         */
+    });
+
+    hearts.forEach(heart => {
+        heart.draw(ctx, camera);
+        heart.checkCollision(player);
     });
 
 }

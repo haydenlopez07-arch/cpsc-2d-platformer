@@ -1,4 +1,4 @@
-import { Animator } from "./animator.js";
+import { Animator } from "../systems/animator.js";
 import { Collectable } from "./collectablesBaseClass.js";
 
 const coinSpriteSheet = new Image();
