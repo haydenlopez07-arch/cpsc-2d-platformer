@@ -1,20 +1,27 @@
 import { keys } from "./userInput.js";
 import { Animator } from "./animator.js";
 import { player } from "../entities/player.js";
-import { applyGravity, clampFallSpeed, 
-        setMovementX, integrate 
+import {
+    applyGravity, clampFallSpeed,
+    setMovementX, integrate
 } from "./physics.js";
 
 const spriteSheet = new Image();
-spriteSheet.src =
-    "./src/assets/sprites/player/main_character/SpriteSheet/spritesheetmcwalkrun.png";
+if (localStorage.getItem("chosenCharacter") == "whiteShirt" || !localStorage.getItem("chosenCharacter")) {
+
+    spriteSheet.src =
+        "./src/assets/sprites/player/main_character/SpriteSheet/spritesheetmcwalkrun.png";
+}
+if (localStorage.getItem("chosenCharacter") == "RedShirt") {
+    spriteSheet.src = "./src/assets/sprites/player/main_character_red_shirt/SpriteSheet/spritesheetmcrwalkrun.png";
+}
 
 export const animator = new Animator(spriteSheet, 48, 43);
 
 animator.addAnimation("idle right", [0]);
 animator.addAnimation("idle left", [1]);
-animator.addAnimation("run right", [2,3,4,5]);
-animator.addAnimation("run left", [6,7,8,9]);
+animator.addAnimation("run right", [2, 3, 4, 5]);
+animator.addAnimation("run left", [6, 7, 8, 9]);
 
 export function playerMovement(dt) {
     animator.update(dt);
