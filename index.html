@@ -59,11 +59,13 @@
             </div>
 
             <!-- Where all the buttons go -->
-            <div class="row justify-content-center w-100 pb-5 px-5 px-md-4 px-lg-5"> <!-- the px- are for when using -around -->
+            <div
+              class="row justify-content-center w-100 pb-5 px-5 px-md-4 px-lg-5"
+            >
+              <!-- the px- are for when using -around -->
               <!-- Used a flexbox to arrage buttons -->
-              <div
-                class="d-flex flex-column align-items-center" 
-              > <!-- try this, align-items-around, instead of -center for another option-->
+              <div class="d-flex flex-column align-items-center">
+                <!-- try this, align-items-around, instead of -center for another option-->
                 <a
                   href="level_one.html"
                   class="btn btn-custom-color btn-hover rounded-1 mb-3 fs-4 fs-custom-sm"
@@ -80,6 +82,13 @@
                   <i class="bi bi-trophy-fill"></i> View Scores
                   <i class="bi bi-trophy-fill"></i>
                 </button>
+                <a
+                  href="character-selection.html"
+                  class="btn btn-custom-color btn-hover rounded-1 mb-3 fs-4 fs-custom-sm"
+                >
+                  <i class="bi bi-person-standing"></i> Change Character
+                  <i class="bi bi-person-standing"></i>
+                </a>
                 <a
                   href="#"
                   class="btn btn-custom-color btn-hover rounded-1 mb-3 fs-4 fs-custom-sm"
@@ -103,19 +112,15 @@
                 <!-- Stuff goes here -->
               </div>
             </div>
-
           </div>
         </div>
 
         <!-- Right column where scores stuff is displayed -->
-        <div class="col-md-6 vh-100 d-none d-md-flex justify-content-center align-items-center" >
-          <div 
-            id="saved_score_inject" 
-            class="w-100"
-          >
-          </div>
+        <div
+          class="col-md-6 vh-100 d-none d-md-flex justify-content-center align-items-center"
+        >
+          <div id="saved_score_inject" class="w-100"></div>
         </div>
-
       </div>
     </div>
 

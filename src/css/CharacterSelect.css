@@ -1,0 +1,158 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.page {
+  min-height: 100vh;
+  background: #0a0a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.retro-wrap {
+  font-family: "Press Start 2P", monospace;
+  border: 3px solid #ffdd00;
+  border-radius: 4px;
+  padding: 32px 24px;
+  color: #ffdd00;
+  width: 100%;
+  max-width: 480px;
+}
+
+.retro-title {
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: #ffdd00;
+  margin-bottom: 6px;
+}
+
+.retro-sub {
+  text-align: center;
+  font-size: 8px;
+  color: #888;
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+}
+
+.char-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.char-card {
+  background: #0f0f2a;
+  border: 2px solid #333;
+  border-radius: 2px;
+  padding: 18px 10px 14px;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.1s, background 0.1s;
+  position: relative;
+}
+
+.char-card:hover {
+  border-color: #ffdd00;
+  background: #1a1a3a;
+}
+
+.char-card.selected {
+  border-color: #ffdd00;
+  background: #1a1a3a;
+}
+
+.char-card.selected::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border: 2px solid #ffdd00;
+  border-radius: 2px;
+  opacity: 0.3;
+}
+
+.sprite-canvas {
+  display: block;
+  margin: 0 auto;
+  image-rendering: pixelated;
+}
+
+.char-name {
+  font-size: 7px;
+  color: #fff;
+  margin-top: 12px;
+  letter-spacing: 1px;
+}
+
+.char-color {
+  font-size: 6px;
+  margin-top: 5px;
+}
+
+.selected-bar {
+  border: 1px solid #333;
+  padding: 10px;
+  margin-bottom: 12px;
+  font-size: 7px;
+  color: #aaa;
+  min-height: 44px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.no-selection {
+  font-size: 7px;
+  color: #444;
+}
+
+.cursor-blink {
+  display: inline-block;
+  width: 8px;
+  height: 14px;
+  background: #ffdd00;
+  animation: blink 0.8s step-end infinite;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.confirm-btn {
+  display: block;
+  width: 100%;
+  font-family: "Press Start 2P", monospace;
+  font-size: 9px;
+  background: #ffdd00;
+  color: #0a0a1a;
+  border: none;
+  padding: 12px;
+  border-radius: 2px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  margin-top: 8px;
+}
+
+.confirm-btn:hover {
+  background: #fff;
+}
+
+.confirm-btn:disabled {
+  background: #333;
+  color: #555;
+  cursor: not-allowed;
+}
