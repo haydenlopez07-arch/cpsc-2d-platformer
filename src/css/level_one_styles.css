@@ -1,13 +1,22 @@
 body {
-    margin: 0;
-    overflow: hidden;
-    background-image: url('../assets/backgrounds/level1/mario_lighter.png');
-    /* background-size: cover; */
-    /* background-position: center; */
+  margin: 0;
+  overflow: hidden;
+  background-image: url("../assets/backgrounds/level1/mario_lighter.png");
+  /* background-size: cover; */
+  /* background-position: center; */
 }
 
 canvas {
-    display: block;
-    width: 100vw;
-    height: 100vh;
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+
+#hud {
+  position: absolute;
+  bottom: 0%;
+  left: 0%;
+  /* transform: translate(-50%, -50%); */
+  z-index: 10;
+  cursor: default;
 }

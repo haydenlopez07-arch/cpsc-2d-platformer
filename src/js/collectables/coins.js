@@ -9,9 +9,22 @@ export const coinAnimator = new Animator(coinSpriteSheet, 16, 16);
 coinAnimator.addAnimation("spin", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
 coinAnimator.setAnimation("spin");
 
-class Coin extends Collectable{
+class Coin extends Collectable {
     constructor(x, y) {
-        super(x,y, 50, 50, coinAnimator);
+        super(x, y, 50, 50, coinAnimator);
+    }
+    checkCollision(player) {
+        if (!this.collected &&
+            player.x + player.w / 2 > this.x &&
+            player.x + player.w / 2 < this.x + this.w &&
+            player.y + player.h / 2 > this.y &&
+            player.y + player.h / 2 < this.y + this.h) {
+            this.collected = true;
+            // Dispatch a custom event to notify DungeonHUD.jsx
+            window.dispatchEvent(new CustomEvent('coinCollected', { detail: { collected: true } }));
+            return true;
+        }
+        return false;
     }
 }
 

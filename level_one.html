@@ -1,11 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-    <head>
-        <title>Level One</title>
-        <link rel="stylesheet" href="src/css/level_one_styles.css">
-    </head>
-    <body>
-        <canvas id="game"></canvas>
-        <script type="module" src="src/js/main.js"></script>
-    </body>
+  <head>
+    <title>Level One</title>
+    <link rel="stylesheet" href="src/css/level_one_styles.css" />
+  </head>
+  <body>
+    <canvas id="game"></canvas>
+    <div id="hud"></div>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script type="module" src="src/js/main.js"></script>
+    <script defer src="src/js/components/dungeonHUD.js" type="module"></script>
+  </body>
 </html>
