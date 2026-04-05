@@ -2,7 +2,7 @@ import { Animator } from "../systems/animator.js";
 import { Collectable } from "./collectablesBaseClass.js";
 
 const swordSpriteSheet = new Image();
-swordSpriteSheet.src = "./src/assets/sprites/collectibles/sword_sheet.png"
+swordSpriteSheet.src = "/assets/sprites/collectibles/sword_sheet.png"
 
 export const swordAnimator = new Animator(swordSpriteSheet, 32, 32);
 swordAnimator.addAnimation("spin", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])

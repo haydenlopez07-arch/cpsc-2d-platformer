@@ -1,13 +1,30 @@
-// @ts-nocheck
 
-const SHEET =
-  "src/assets/sprites/player/main_character/SpriteSheet/spritesheetmcwalkrun.png";
+import React from "react";
+import { useEffect, useRef, useState } from "react";
+import "../../css/CharacterSelect.css"
+import whiteShirtCharacter from "../../assets/sprites/player/main_character/rotations/AIdleeast.png";
+import redShirtCharacter from "../../assets/sprites/player/main_character_red_shirt/rotations/east.png";
+import spriteSheet from "../../assets/sprites/player/main_character/SpriteSheet/spritesheetmcwalkrun.png";
 
-const characters = [
+const SHEET = spriteSheet;
+
+interface Character {
+  id: number;
+  name: string;
+  source: string;
+  shirtColor: string;
+  frameWidth: number;
+  frameHeight: number;
+  frameCount: number;
+  fps: number;
+  sheetRow: number;
+}
+
+const characters: Character[] = [
   {
     id: 1,
     name: "whiteShirt",
-    source: "src/assets/sprites/player/main_character/rotations/AIdleeast.png",
+    source: whiteShirtCharacter,
     shirtColor: "#FFFFFF",
     frameWidth: 16,
     frameHeight: 64,
@@ -17,8 +34,7 @@ const characters = [
   },
   {
     id: 2,
-    source:
-      "src/assets/sprites/player/main_character_red_shirt/rotations/east.png",
+    source: redShirtCharacter,
     name: "RedShirt",
     shirtColor: "#FF0000",
     frameWidth: 64,
@@ -29,12 +45,12 @@ const characters = [
   },
 ];
 
-function SpriteAnimator({ char, size = 64 }) {
-  const canvasRef = React.useRef(null);
-  const frameRef = React.useRef(0);
-  const imgRef = React.useRef(null);
+function SpriteAnimator({ char, size = 64 }: { char: Character; size?: number }) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const frameRef = useRef(0);
+  const imgRef = useRef<HTMLImageElement | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const img = new Image();
     img.src = SHEET;
     imgRef.current = img;
@@ -48,6 +64,7 @@ function SpriteAnimator({ char, size = 64 }) {
       const canvas = canvasRef.current;
       if (!canvas || !imgRef.current) return;
       const ctx = canvas.getContext("2d");
+      if (!ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.imageSmoothingEnabled = false;
       ctx.drawImage(
@@ -76,7 +93,14 @@ function SpriteAnimator({ char, size = 64 }) {
   );
 }
 
-function CharCard({ char, selected, onClick, source }) {
+interface CharCardProps {
+  char: Character;
+  selected: boolean;
+  onClick: () => void;
+  source: string;
+}
+
+function CharCard({ char, selected, onClick, source }: CharCardProps) {
   return (
     <div
       className={`char-card ${selected ? "selected" : ""}`}
@@ -90,16 +114,18 @@ function CharCard({ char, selected, onClick, source }) {
     </div>
   );
 }
-
-function CharacterSelect() {
-  const [selected, setSelected] = React.useState(null);
+interface CharacterSelectProps {
+  onSendShownComponent: (data: any) => void;
+}
+function CharacterSelect({onSendShownComponent}: CharacterSelectProps) {
+  const [selected, setSelected] = useState<number | null>(null);
   const char = characters.find((c) => c.id === selected);
 
   function handleConfirm() {
     if (!char) return;
     localStorage.setItem("chosenCharacter", char.name);
-    window.history.back();
-  }
+    onSendShownComponent("mainMenu")
+}
 
   return (
     <div className="page">
@@ -142,9 +168,4 @@ function CharacterSelect() {
   );
 }
 
-(function start() {
-  const container = document.getElementById("main");
-  if (!container) return;
-  const root = ReactDOM.createRoot(container);
-  root.render(React.createElement(CharacterSelect, null));
-})();
+export default CharacterSelect

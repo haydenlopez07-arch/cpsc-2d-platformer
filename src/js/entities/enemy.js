@@ -2,7 +2,7 @@ import { applyGravity, clampFallSpeed, integrate } from "../systems/physics.js";
 import { Animator } from "../systems/animator.js";
 
 const enemySprite = new Image();
-enemySprite.src = "src/assets/sprites/enemies/level-one/troll_enemy/Sprite-For-Troll.png";
+enemySprite.src = "/assets/sprites/enemies/level-one/troll_enemy/Sprite-For-Troll.png";
 
 export class Enemy {
     constructor(x, y) {
@@ -27,10 +27,10 @@ export class Enemy {
         this.animator = new Animator(enemySprite, 48, 48);
         this.animator.addAnimation("idle right", [0]);
         this.animator.addAnimation("idle left", [15]);
-        this.animator.addAnimation("walk right", [1,2,3,4]);
-        this.animator.addAnimation("walk left", [16,17,18,19]);
-        this.animator.addAnimation("attack right", [10,11,12,13]);
-        this.animator.addAnimation("attack left", [5,6,7,8]);
+        this.animator.addAnimation("walk right", [1, 2, 3, 4]);
+        this.animator.addAnimation("walk left", [16, 17, 18, 19]);
+        this.animator.addAnimation("attack right", [10, 11, 12, 13]);
+        this.animator.addAnimation("attack left", [5, 6, 7, 8]);
 
         // state
         this.state = "patrol";
@@ -57,12 +57,12 @@ export class Enemy {
         } else if (this.state === "follow") {
             this.follow(dt, dx, distance); this.animator.setAnimation("walk " + this.facing);
         } else if (this.state === "attack") {
-            this.attack(distance);  this.animator.setAnimation("attack " + this.facing)
+            this.attack(distance); this.animator.setAnimation("attack " + this.facing)
         }
 
         applyGravity(this, dt);
         clampFallSpeed(this)
-        
+
         this.grounded = false;
 
         integrate(this, dt);
@@ -106,7 +106,7 @@ export class Enemy {
 
         if (this.vx > 0) this.facing = "right";
         else if (this.vx < 0) this.facing = "left";
-    
+
     }
 
     attack(distance) {

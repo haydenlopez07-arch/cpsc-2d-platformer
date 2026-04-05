@@ -3,7 +3,7 @@ import { Collectable } from "./collectablesBaseClass.js";
 
 const heartSpriteSheet = new Image();
 heartSpriteSheet.src =
-    "./src/assets/sprites/collectibles/heart_sheet.png";
+    "/assets/sprites/collectibles/heart_sheet.png";
 
 export const heartAnimator = new Animator(heartSpriteSheet, 128, 74);
 heartAnimator.addAnimation("spin", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);

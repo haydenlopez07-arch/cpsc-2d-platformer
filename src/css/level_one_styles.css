@@ -12,6 +12,25 @@ canvas {
   height: 100vh;
 }
 
+.game-stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+.hud-overlay {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 10;
+  width: min(460px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.hud-overlay > * {
+  pointer-events: auto;
+}
+
 #hud {
   position: absolute;
   bottom: 0%;

@@ -2,10 +2,17 @@ import { keys } from "../systems/userInput.js";
 import { LevelOneMap } from "./levelOneMapRender.js";
 import { BossArena } from "./bossArenaRender.js";
 
-const levelOne = new LevelOneMap();
-const bossArena = new BossArena();
+let levelOne;
+let bossArena;
+let levels;
+let canvas;
 
-const levels = [levelOne, bossArena]
+export function initializeLevels(gameCanvas) {
+    canvas = gameCanvas;
+    levelOne = new LevelOneMap(canvas);
+    bossArena = new BossArena(canvas);
+    levels = [levelOne, bossArena];
+}
 
 let canSwitch = true;
 let currentLevel = 0;
@@ -29,6 +36,6 @@ export function getCurrentLevel() {
 
 export function render() {
     moveMaps();
-    
+
     levels[currentLevel].render();
 }

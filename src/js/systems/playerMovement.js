@@ -10,10 +10,10 @@ const spriteSheet = new Image();
 if (localStorage.getItem("chosenCharacter") == "whiteShirt" || !localStorage.getItem("chosenCharacter")) {
 
     spriteSheet.src =
-        "./src/assets/sprites/player/main_character/SpriteSheet/spritesheetmcwalkrun.png";
+        "/assets/sprites/player/main_character/SpriteSheet/spritesheetmcwalkrun.png";
 }
 if (localStorage.getItem("chosenCharacter") == "RedShirt") {
-    spriteSheet.src = "./src/assets/sprites/player/main_character_red_shirt/SpriteSheet/spritesheetmcrwalkrun.png";
+    spriteSheet.src = "/assets/sprites/player/main_character_red_shirt/SpriteSheet/spritesheetmcrwalkrun.png";
 }
 
 export const playerAnimator = new Animator(spriteSheet, 48, 43);

@@ -1,10 +1,8 @@
 import { player } from "../entities/player.js";
 import { playerAnimator } from "../systems/playerMovement.js";
 
-const canvas = document.getElementById("game");
-
 export class BaseRender {
-    constructor(map, mapRows, mapCols, tileSize, spriteSheetSrc) {
+    constructor(canvas, map, mapRows, mapCols, tileSize, spriteSheetSrc) {
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
 

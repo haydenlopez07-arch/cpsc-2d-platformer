@@ -45,6 +45,7 @@ export class Animator {
     //method to draw each image
     draw(ctx, x, y, width, height) {
         if (!this.currentAnimation) return;
+        if (!this.spriteSheet || !this.spriteSheet.complete || this.spriteSheet.naturalWidth === 0) return;
 
         const frameNumber = this.currentAnimation[this.frameIndex];
 

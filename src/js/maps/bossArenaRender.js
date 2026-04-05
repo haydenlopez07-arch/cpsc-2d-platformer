@@ -1,17 +1,18 @@
 import { BaseRender } from "./renderBaseClass.js";
-import { 
+import {
     Mrows, Mcols, tileSize, map,
     tileLocation, TILES, dirtVari
 } from "./bossArena.js";
 
 export class BossArena extends BaseRender {
-    constructor() {
+    constructor(canvas) {
         super(
+            canvas,
             map,
             Mrows,
             Mcols,
             tileSize,
-            "../../src/assets/sprites/tiles/world_tileset.png",
+            "/assets/sprites/tiles/world_tileset.png",
         );
 
         this.now = new Date();
@@ -49,10 +50,12 @@ export class BossArena extends BaseRender {
                 this.ctx.fillRect(tileX, tileY, this.tileSize, this.tileSize);
 
                 if (tile === TILES.GRASS) {
+                    if (!this.tileSet.complete || this.tileSet.naturalWidth === 0) continue;
                     this.ctx.drawImage(this.tileSet, gsx, gsy, ogSize, ogSize, tileX, tileY, this.tileSize, this.tileSize);
                 }
 
                 if (tile === TILES.DIRT) {
+                    if (!this.tileSet.complete || this.tileSet.naturalWidth === 0) continue;
                     let [fsx, fsy] = dirtVari[y][x];
                     this.ctx.drawImage(this.tileSet, fsx, fsy, ogSize, ogSize, tileX, tileY, tileSize, tileSize);
                 }

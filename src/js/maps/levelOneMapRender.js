@@ -9,14 +9,30 @@ import { enemies } from "../entities/enemy.js";
 import { sword } from "../collectables/sword.js";
 
 export class LevelOneMap extends BaseRender {
-    constructor() {
+    constructor(canvas) {
         super(
+            canvas,
             map,
             Mrows,
             Mcols,
             tileSize,
-            "../../src/assets/sprites/tiles/world_tileset.png",
+            "/assets/sprites/tiles/world_tileset.png",
         );
+
+        this.background = new Image();
+        const backgroundSources = [
+            "/assets/backgrounds/level1/mario_lighter.png",
+            "/assets/backgrounds/temp-menu-clouds-background.jpg",
+            "/assets/backgrounds/sky.PNG"
+        ];
+        let sourceIndex = 0;
+        this.background.onerror = () => {
+            sourceIndex += 1;
+            if (sourceIndex < backgroundSources.length) {
+                this.background.src = backgroundSources[sourceIndex];
+            }
+        };
+        this.background.src = backgroundSources[sourceIndex];
 
         this.coins = coins;
         this.hearts = hearts;
@@ -30,6 +46,20 @@ export class LevelOneMap extends BaseRender {
     // need their own specific details I think if not then
     // we can later just put draw map in the base class
     drawMap() {
+        if (this.background.complete && this.background.naturalWidth > 0) {
+            const bgWidth = this.background.naturalWidth;
+            const bgHeight = this.background.naturalHeight;
+            const bgScale = this.canvas.height / bgHeight;
+            const drawWidth = bgWidth * bgScale;
+            const parallaxX = -(this.camera.x * 0.2) % drawWidth;
+
+            for (let x = parallaxX - drawWidth; x < this.canvas.width + drawWidth; x += drawWidth) {
+                this.ctx.drawImage(this.background, x, 0, drawWidth, this.canvas.height);
+            }
+        } else {
+            this.ctx.fillStyle = "#7fc8ff";
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        }
 
         const ogSize = tileLocation.tileSize;
         const [gsx, gsy] = tileLocation.grass;
@@ -61,10 +91,12 @@ export class LevelOneMap extends BaseRender {
                 this.ctx.fillRect(tileX, tileY, tileSize, tileSize);
 
                 if (tile === TILES.GRASS) {
+                    if (!this.tileSet.complete || this.tileSet.naturalWidth === 0) continue;
                     this.ctx.drawImage(this.tileSet, gsx, gsy, ogSize, ogSize, tileX, tileY, tileSize, tileSize);
                 }
 
                 if (tile === TILES.DIRT) {
+                    if (!this.tileSet.complete || this.tileSet.naturalWidth === 0) continue;
                     let [fsx, fsy] = dirtVari[y][x];
                     this.ctx.drawImage(this.tileSet, fsx, fsy, ogSize, ogSize, tileX, tileY, tileSize, tileSize);
                 }
@@ -102,7 +134,7 @@ export class LevelOneMap extends BaseRender {
             y: 1450,
             yh: 1450 + 100
         }
-        
+
         if (
             px > doorLocation.x &&
             pxw < doorLocation.xw &&
