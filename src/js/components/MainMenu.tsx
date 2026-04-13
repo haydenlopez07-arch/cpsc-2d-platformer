@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../../css/main-menu-style.css"
 import "../../css/styles.css"
 import backgroundImage from '../../assets/backgrounds/temp-menu-clouds-background.jpg';
-import titleImage from '../../assets/sprites/ui/temp-transparent-title.png';
+import titleImage from '../../assets/sprites/ui/title_card.png';
 import SavedScore from "./SavedScore";
 import FirstTimePlaying from "./FirstTimePlaying";
 
