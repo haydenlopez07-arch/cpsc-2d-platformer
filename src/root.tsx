@@ -16,4 +16,4 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 // })();
 
 const root: Root = createRoot(document.getElementById("main")!);
-root.render(<App />)
+root.render(<App />);

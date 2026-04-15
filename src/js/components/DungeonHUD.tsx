@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState } from "react";
+import React, { CSSProperties, useEffect, useRef, useState } from "react";
 
 type PlayerHealthDetail = {
   health: number;
@@ -90,10 +90,19 @@ const styles = {
 
 function DungeonHUD() {
   const swordSpriteSheet = "/assets/sprites/collectibles/sword_HUD.png";
-  const [swordCollected, setSwordCollected] = useState(false);
-  const [hp, setHp] = useState(0);
-  const [maxHp, setMaxHp] = useState(1);
-  const [coinCount, setCoinCount] = useState(0);
+  const [swordCollected, setSwordCollected] = React.useState(false);
+  const [hp, setHp] = React.useState(3);
+  const maxHp = 5;
+  const [coinCount, setCoinCount] = React.useState(0);
+  const hasDispatchedLevelEndRef = useRef(false);
+
+  const getTimeAlive = () => {
+    const getTimeAliveSeconds = (window as any).getTimeAliveSeconds;
+    if (typeof getTimeAliveSeconds === "function") {
+      return getTimeAliveSeconds();
+    }
+    return 0;
+  };
   // Listen for the sword collection event sent from sword.js
   useEffect(() => {
     const handleSwordCollected = (event: Event) => {
@@ -113,17 +122,61 @@ function DungeonHUD() {
       if (!detail) return;
 
       setHp(detail.health);
-      setMaxHp(detail.maxHealth);
     };
 
     window.addEventListener("playerHealthChanged", handlePlayerHealthChanged);
 
+    const handlePlayerDamaged = () => {
+      setHp((prev) => (prev > 0 ? prev - 1 : prev));
+    };
+
+    window.addEventListener("playerDamaged", handlePlayerDamaged);
+
+    const handleBossDefeated = () => {
+      if (hasDispatchedLevelEndRef.current) return;
+      hasDispatchedLevelEndRef.current = true;
+
+      window.dispatchEvent(
+        new CustomEvent("levelEnded", {
+          detail: {
+            reason: "victory",
+            coinsCollected: coinCount,
+            highestLevelAchieved: 1,
+            timeAlive: getTimeAlive(),
+          },
+        })
+      );
+    };
+
+    window.addEventListener("bossDefeated", handleBossDefeated);
+
     return () => {
       window.removeEventListener("swordCollected", handleSwordCollected);
       window.removeEventListener("coinCollected", handleCoinCollected);
-      window.removeEventListener("playerHealthChanged", handlePlayerHealthChanged);
+      window.removeEventListener("heartCollected", handlePlayerHealthChanged);
+      window.removeEventListener("playerDamaged", handlePlayerDamaged);
+      window.removeEventListener("bossDefeated", handleBossDefeated);
     };
-  }, []);
+  }, [coinCount]);
+
+  useEffect(() => {
+    if (hp > 0 || hasDispatchedLevelEndRef.current) return;
+
+    hasDispatchedLevelEndRef.current = true;
+    window.dispatchEvent(
+      new CustomEvent("levelEnded", {
+        detail: {
+          reason: "death",
+          coinsCollected: coinCount,
+          highestLevelAchieved: 1,
+          timeAlive: getTimeAlive(),
+        },
+      })
+    );
+  }, [hp, coinCount]);
+
+  //TODO add event listener for when the end of the level is finished so we can update scores in local storage
+  //TODO add damage listeners to decrease hp
 
   return (
     <>

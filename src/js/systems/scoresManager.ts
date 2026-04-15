@@ -1,15 +1,57 @@
-//NOTE This function can be called whenever you want to save the amount of coins collected to the scores object in localStorage. It fires an event to SavedScore.tsx that updates the object in localStorage and rerenders the component.
-//We can call this on level completion as well once we implement the boss fight.
-export const updatePlayerCoins = (coinsAdded: number) => {
-  const scores = JSON.parse(localStorage.getItem("scores") || "[]");
-  const playerName = localStorage.getItem("playerName");
+interface Score {
+  name: string;
+  highestLevelAchieved: number;
+  coinsCollected: number;
+}
 
+interface LevelResult {
+  coinsCollected: number;
+  highestLevelAchieved: number;
+}
+
+const getOrCreateScores = (): Score[] => {
+  const raw = localStorage.getItem("scores");
+  if (!raw) return [];
+
+  const parsed = JSON.parse(raw) as unknown;
+  return Array.isArray(parsed) ? (parsed as Score[]) : [];
+};
+
+const emitScoreUpdated = () => {
+  window.dispatchEvent(new CustomEvent("scoresUpdated"));
+};
+
+export const saveLevelResult = ({
+  coinsCollected,
+  highestLevelAchieved,
+}: LevelResult): void => {
+  const playerName = localStorage.getItem("playerName");
   if (!playerName) return;
 
-  const playerScore = scores.find((score: any) => score.name === playerName);
-  if (playerScore) {
-    playerScore.coinsCollected += coinsAdded;
-    localStorage.setItem("scores", JSON.stringify(scores));
-    window.dispatchEvent(new CustomEvent("scoresUpdated"));
+  const scores = getOrCreateScores();
+  const existing = scores.find((score) => score.name === playerName);
+
+  if (existing) {
+    existing.coinsCollected += coinsCollected;
+    existing.highestLevelAchieved = Math.max(
+      existing.highestLevelAchieved,
+      highestLevelAchieved,
+    );
+  } else {
+    scores.push({
+      name: playerName,
+      highestLevelAchieved,
+      coinsCollected,
+    });
   }
+
+  localStorage.setItem("scores", JSON.stringify(scores));
+  emitScoreUpdated();
+};
+
+export const updatePlayerCoins = (coinsAdded: number): void => {
+  saveLevelResult({
+    coinsCollected: coinsAdded,
+    highestLevelAchieved: 0,
+  });
 };
