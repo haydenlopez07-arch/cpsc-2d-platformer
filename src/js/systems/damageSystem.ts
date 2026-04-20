@@ -1,5 +1,6 @@
 import type { Player } from "../entities/player";
 import type { Enemy } from "../entities/enemy";
+import { Coin, coins } from "../collectables/coins.js";
 
 type Rect = {
     x: number;
@@ -176,6 +177,7 @@ export function resetPlayer(player: Player): void {
 export function removeEnemy(enemies: Enemy[]): void {
     for (let i = enemies.length - 1; i >= 0; i--){
         if (enemies[i].isDead || enemies[i].health <= 0) {
+            dropCoinOnDeath(enemies[i]);
             enemies.splice(i, 1);
         }
     }
@@ -184,7 +186,15 @@ export function removeEnemy(enemies: Enemy[]): void {
 export function removeEnemyInPit(enemies: Enemy[]): void {
     for (let i = enemies.length - 1; i >= 0; i--){
         if (enemies[i].y > 1750) {
+            dropCoinOnDeath(enemies[i]);
             enemies.splice(i, 1);
         }
     }
+}
+
+function dropCoinOnDeath(enemy: Enemy): void {
+    const enemyX = enemy.x
+    const enemyY = enemy.y
+
+    coins.push(new Coin(enemyX, enemyY));
 }
