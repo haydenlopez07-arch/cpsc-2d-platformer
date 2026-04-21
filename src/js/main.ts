@@ -52,7 +52,7 @@ function syncPlayerHealthHud(force = false): void {
 }
 
 window.addEventListener("keydown", (event: KeyboardEvent) => {
-  if (event.code === "KeyF") {
+  if (event.code === "KeyF" && !event.repeat) {
     attackPressed = true;
   }
 });
@@ -114,7 +114,7 @@ function loop(timestamp: number): void {
   }
 
   // draw everything
-  render();
+  render(dt);
   syncPlayerHealthHud();
 
   requestAnimationFrame(loop);

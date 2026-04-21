@@ -1,7 +1,7 @@
 // Physics helpers for movement shortcuts
 // Gravity applied to player, velocity updates,
 // and position integrates with our delta time
-import { horizontal, vertical} from "./mapCollision.js";
+import { horizontal, vertical } from "./mapCollision.js";
 const GRAVITY = 1250;
 
 export function applyGravity(player, dt) {
@@ -30,7 +30,7 @@ export function setMovementX(player, direction) {
 }
 
 export function integrate(player, dt) {
-    player.Grounded = false;
+    player.grounded = false;
     player.x += player.vx * dt;
     horizontal(player);
     player.y += player.vy * dt;

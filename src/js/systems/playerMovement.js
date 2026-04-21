@@ -46,8 +46,6 @@ export function playerMovement(dt) {
     if (!current) return;
 
     if (player.mode === "sword" && player.attackTimer > 0) {
-        const current = animators[player.mode];
-
         const animName =
             player.lastDir === "left"
                 ? "attack left"
@@ -55,6 +53,7 @@ export function playerMovement(dt) {
 
         current.attack.setAnimation(animName);
         current.attack.update(dt);
+        return;
     }
 
     if (!player.grounded) {

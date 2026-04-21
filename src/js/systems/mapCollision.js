@@ -93,6 +93,15 @@ export function vertical(entity) {
             }
         }
     }
+    
+    // standing check
+    const below = Math.floor((entity.y + entity.h + verticalBuffer) / tileSize);
+    for (let col = leftTile; col <= rightTile; col++) {
+        if (solidTiles.includes(getTile(col, below))) {
+            entity.grounded = true;
+            return;
+        }
+    }
 }
 
 

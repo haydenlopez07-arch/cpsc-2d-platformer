@@ -41,28 +41,6 @@ function moveMaps(dt) {
         switchCooldown -= dt;
         return;
     }
-
-    // If portal collision triggered switch
-    // if (level.canSwitch) {
-    //     console.log("SWITCHING LEVEL"); 
-
-    //     currentLevel = (currentLevel + 1) % levels.length;
-
-    //     // Set spawn positions
-    //     if (currentLevel === 0) {
-    //         levelOne.setPlayerPos(2000, 1750);
-    //     }
-
-    //     if (currentLevel === 1) {
-    //         bossArena.setPlayerPos(540, 1605);
-    //     }
-
-    //     // Reset so it doesn't instantly retrigger
-    //     level.canSwitch = false;
-
-    //     // Add delay so player doesn't bounce back
-    //     switchCooldown = 1; // seconds
-    // }
 }
 
 export function getCurrentLevel() {

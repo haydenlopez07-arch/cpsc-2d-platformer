@@ -1,7 +1,13 @@
+import { ENEMY_DEFAULTS } from "../config/enemyConfig";
 import { applyGravity, clampFallSpeed, integrate } from "../systems/physics";
-
 import { Animator } from "../systems/animator";
 import type { Player } from "./player";
+import type { Damageable } from "../../types/damageable";
+
+
+export type EnemyMode = "patrol" | "follow" | "attack";
+export type EnemyFacing = "left" | "right";
+export type PatrolDirection = -1 | 1;
 
 const enemySprite = new Image();
 enemySprite.src = "/assets/sprites/enemies/level-one/troll_enemy/Sprite-For-Troll.png";
@@ -17,7 +23,6 @@ export interface EnemyState extends Damageable {
         vy: number;
         moveSpeed: number;
         maxFallSpeed: number;
-        direction: -1 | 1;
         grounded: boolean;
         health: number;
         maxHealth: number;
@@ -27,28 +32,14 @@ export interface EnemyState extends Damageable {
         isDead: boolean;
         knockbackX: number;
         knockbackY: number;
-
-        // added this just for now to make them move
-        // but i don't know how you want to code this stuff
-        // so this is just temp for now
         animator: Animator;
-        state: "patrol" | "follow" | "attack";
-        facing: "left" | "right";
-        patrolDir: number;
+        state: EnemyMode;
+        facing: EnemyFacing;
+        patrolDir: PatrolDirection;
         patrolTimer: number;
         patrolDuration: number;
         followRange: number;
         attackRange: number;
-}
-
-export interface Damageable {
-    health: number;
-    maxHealth: number;
-    isDead: boolean;
-    vx: number;
-    vy: number;
-    knockbackX: number;
-    knockbackY: number;
 }
 
 export class Enemy implements EnemyState {
@@ -62,7 +53,6 @@ export class Enemy implements EnemyState {
     vy: number;
     moveSpeed: number;
     maxFallSpeed: number;
-    direction: 1 | -1;
     grounded: boolean;
     health: number;
     maxHealth: number;
@@ -74,35 +64,43 @@ export class Enemy implements EnemyState {
     knockbackY: number;
 
     animator: Animator;
-    state: "patrol" | "follow" | "attack";
-    facing: "left" | "right";
-    patrolDir: number;
+    state: EnemyMode;
+    facing: EnemyFacing;
+    patrolDir: PatrolDirection;
     patrolTimer: number;
     patrolDuration: number;
     followRange: number;
     attackRange: number;
 
     constructor(x: number, y: number) {
+
+        // starting state
         this.x = x;
         this.y = y;
         this.spawnX = x;
         this.spawnY = y;
-        this.w = 70;
-        this.h = 70;
+        this.w = ENEMY_DEFAULTS.size.w;
+        this.h = ENEMY_DEFAULTS.size.h;
         this.vx = 0;
         this.vy = 0;
-        this.moveSpeed = 100;
-        this.maxFallSpeed = 1000;
+        this.moveSpeed = ENEMY_DEFAULTS.movement.patrolSpeed;
+        this.maxFallSpeed = ENEMY_DEFAULTS.movement.maxFallSpeed;
         this.grounded = false;
-        this.direction = -1;
-        this.health = 3;
-        this.maxHealth = 3;
-        this.damage = 1;
-        this.attackCooldown = 1000;
+        this.health = ENEMY_DEFAULTS.combat.health;
+        this.maxHealth = ENEMY_DEFAULTS.combat.maxHealth;
+        this.damage = ENEMY_DEFAULTS.combat.damage;
+        this.attackCooldown = ENEMY_DEFAULTS.combat.attackCooldown;
         this.attackTimer = 0;
         this.isDead = false;
         this.knockbackX = 0;
         this.knockbackY = 0;
+        this.state = ENEMY_DEFAULTS.initialState.mode;
+        this.facing = ENEMY_DEFAULTS.initialState.facing;
+        this.patrolDir = ENEMY_DEFAULTS.patrol.direction;
+        this.patrolTimer = 0;
+        this.patrolDuration = ENEMY_DEFAULTS.patrol.duration;
+        this.followRange = ENEMY_DEFAULTS.ranges.follow;
+        this.attackRange = ENEMY_DEFAULTS.ranges.attack;
 
         // animations
         this.animator = new Animator(enemySprite, 48, 48);
@@ -112,32 +110,23 @@ export class Enemy implements EnemyState {
         this.animator.addAnimation("walk left", [16, 17, 18, 19]);
         this.animator.addAnimation("attack right", [10, 11, 12, 13]);
         this.animator.addAnimation("attack left", [5, 6, 7, 8]);
-        // state
-        this.state = "patrol";
-        this.facing = "left";
-        // patrol variables
-        this.patrolDir = -1;
-        this.patrolTimer = 0;
-        this.patrolDuration = 2;
-        // ranges
-        this.followRange = 300;
-        this.attackRange = 30;
-
     }
 
     update(dt: number, player: Player): void {
 
         // states
-        let dx = player.x - this.x;
-        let distance = Math.abs(dx);
+        const dx = player.x - this.x;
+        const distance = Math.abs(dx);
 
         if (this.state === "patrol") {
-            this.patrol(dt, distance); this.animator.setAnimation("walk " + this.facing);
+            this.patrol(dt, distance);
         } else if (this.state === "follow") {
-            this.follow(dx, distance); this.animator.setAnimation("walk " + this.facing);
+            this.follow(dx, distance);
         } else if (this.state === "attack") {
-            this.attack(distance); this.animator.setAnimation("attack " + this.facing)
+            this.attack(distance);
         }
+
+        this.updateAnimation();
 
         this.vx += this.knockbackX;
         this.vy += this.knockbackY;
@@ -146,26 +135,40 @@ export class Enemy implements EnemyState {
         this.knockbackY *= 0.6;
 
         if (Math.abs(this.knockbackX) < 1) this.knockbackX = 0;
+        if (Math.abs(this.knockbackY) < 1) this.knockbackY = 0;
 
         applyGravity(this, dt);
         clampFallSpeed(this)
 
         this.grounded = false;
-
         integrate(this, dt);
 
         this.animator.update(dt);
     }
 
-    patrol(dt: number, distance: number): void {
-        this.moveSpeed = 100;
-        this.vx = this.patrolDir * this.moveSpeed;
+    private updateFacing(): void {
+        if (this.vx > 0) this.facing = "right";
+        else if (this.vx < 0) this.facing = "left";
+    }
 
+    private updateAnimation(): void {
+    if (this.state === "attack") {
+        this.animator.setAnimation("attack " + this.facing);
+    } else if (this.vx !== 0) {
+        this.animator.setAnimation("walk " + this.facing);
+    } else {
+        this.animator.setAnimation("idle " + this.facing);
+    }
+}
+
+    patrol(dt: number, distance: number): void {
+        this.moveSpeed = ENEMY_DEFAULTS.movement.patrolSpeed;
         this.patrolTimer += dt;
 
         if (this.patrolTimer >= this.patrolDuration) {
-            this.patrolDir = -this.patrolDir;
+            this.patrolDir = this.patrolDir === 1 ? -1 : 1;
             this.patrolTimer = 0;
+            this.vx = this.patrolDir * this.moveSpeed;
         }
 
         if (distance < this.followRange) {
@@ -173,27 +176,21 @@ export class Enemy implements EnemyState {
         }
 
         this.vx = this.patrolDir * this.moveSpeed;
-
-        if (this.vx > 0) this.facing = "right";
-        else if (this.vx < 0) this.facing = "left";
+        this.updateFacing();
     }
 
     follow(dx: number, distance: number): void {
-        this.moveSpeed = 250;
-        let dir = dx !== 0 ? dx / Math.abs(dx) : 0;
+        this.moveSpeed = ENEMY_DEFAULTS.movement.followSpeed;
+        const dir = dx !== 0 ? dx / Math.abs(dx) : 0;
         this.vx = dir * this.moveSpeed;
 
         if (distance < this.attackRange) {
             this.state = "attack";
-        }
-        else if (distance > this.followRange) {
+        } else if (distance > this.followRange) {
             this.state = "patrol";
         }
-        this.vx = dir * this.moveSpeed;
-
-        if (this.vx > 0) this.facing = "right";
-        else if (this.vx < 0) this.facing = "left";
-
+        
+        this.updateFacing();
     }
 
     attack(distance: number): void {
@@ -203,30 +200,6 @@ export class Enemy implements EnemyState {
             this.state = "follow";
         }
     }
-
-    // update(dt: number, player: Player): void {
-    //     if (this.isDead) return;
-        
-    //     if (this.attackTimer > 0) {
-    //         this.attackTimer -= dt;
-    //         if (this.attackTimer < 0) {
-    //             this.attackTimer = 0;
-    //         }
-    //     }
-
-    //     this.grounded = false;
-
-    //     const distanceX = player.x - this.x;
-
-    //     if (Math.abs(distanceX) < 300) {
-    //         this.direction = distanceX < 0 ? -1 : 1;
-    //         this.vx = this.direction * this.moveSpeed;
-    //     } else {
-    //         this.vx = this.direction * this.moveSpeed * 0.5;
-    //     }
-
-    //      this.x += this.vs * dt;
-    // }
 }
 
 export const enemies: Enemy[] = [

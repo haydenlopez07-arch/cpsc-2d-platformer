@@ -1,3 +1,8 @@
+import { PLAYER_DEFAULTS } from "../config/playerConfig";
+
+export type PlayerMode = "unarmed" | "sword";
+export type FacingDirection = "left" | "right";
+
 export interface Player {
         x: number;
         y: number;
@@ -23,10 +28,8 @@ export interface Player {
         isDead: boolean;
         knockbackX: number;
         knockbackY: number;
-        mode: "unarmed" | "sword";
+        mode: PlayerMode;
 }
-
-export type FacingDirection = "left" | "right";
 
 export function createPlayer(x: number, y: number): Player {
     return {
@@ -34,28 +37,31 @@ export function createPlayer(x: number, y: number): Player {
         y,
         spawnX: x,
         spawnY: y,
-        w: 60,
-        h: 60,
+        w: PLAYER_DEFAULTS.size.w,
+        h: PLAYER_DEFAULTS.size.h,
         vx: 0,
         vy: 0,
-        moveSpeed: 450,
-        jump: 800,
-        maxFallSpeed: 1400,
+        moveSpeed: PLAYER_DEFAULTS.movement.moveSpeed,
+        jump: PLAYER_DEFAULTS.movement.jump,
+        maxFallSpeed: PLAYER_DEFAULTS.movement.maxFallSpeed,
         grounded: false,
-        lastDir: "right",
+        lastDir: PLAYER_DEFAULTS.facing,
         collectedCoins: 0,
-        health: 3,
-        maxHealth: 5,
-        damage: 1,
-        attackCooldown: .25,
+        health: PLAYER_DEFAULTS.combat.health,
+        maxHealth: PLAYER_DEFAULTS.combat.maxHealth,
+        damage: PLAYER_DEFAULTS.combat.damage,
+        attackCooldown: PLAYER_DEFAULTS.combat.attackCooldown,
         attackTimer: 0,
-        invulnTime: 2,
+        invulnTime: PLAYER_DEFAULTS.combat.invulnTime,
         invulnTimer: 0,
         isDead: false,
         knockbackX: 0,
         knockbackY: 0,
-        mode: "unarmed"
+        mode: PLAYER_DEFAULTS.mode,
     };
 }
 
-export const player: Player = createPlayer(200, 1500);
+export const player: Player = createPlayer(
+    PLAYER_DEFAULTS.spawn.x, 
+    PLAYER_DEFAULTS.spawn.y
+);
