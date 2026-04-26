@@ -7,6 +7,7 @@ import {
     integrate
 } from "./physics.js";
 import { animators } from "./playerSetup";
+import playSound from "./soundsManager";
 
 export function playerMovement(dt) {
 
@@ -35,6 +36,7 @@ export function playerMovement(dt) {
     if (Math.abs(player.knockbackY) < 1) player.knockbackY = 0;
 
     if (keys.up && player.grounded) {
+        playSound("jump");
         player.vy = -player.jump;
         player.grounded = false;
     }

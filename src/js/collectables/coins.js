@@ -1,5 +1,6 @@
 import { Animator } from "../systems/animator.js";
 import { Collectable } from "./collectablesBaseClass.js";
+import playSound from "../systems/soundsManager";
 
 const coinSpriteSheet = new Image();
 coinSpriteSheet.src =
@@ -12,6 +13,10 @@ coinAnimator.setAnimation("spin");
 export class Coin extends Collectable {
     constructor(x, y) {
         super(x, y, 50, 50, coinAnimator);
+    }
+
+    playSound() {
+        playSound("coin");
     }
 }
 

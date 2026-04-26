@@ -10,6 +10,7 @@ import { sword } from "../collectables/sword.js";
 import { powerUps } from "../collectables/powerUps";
 import { Portal } from "../entities/portal.js";
 import { heal } from "../systems/damageSystem";
+import { startBGMusic } from "../systems/soundsManager";
 
 export class LevelOneMap extends BaseRender {
     constructor(canvas) {
@@ -52,6 +53,8 @@ export class LevelOneMap extends BaseRender {
         this.hearts = hearts;
         this.sword = sword;
         this.enemies = enemies;
+
+        startBGMusic();
     }
 
     // When you override drawMap you'll make your own draw 

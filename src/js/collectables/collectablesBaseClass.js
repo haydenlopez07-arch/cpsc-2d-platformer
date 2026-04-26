@@ -30,6 +30,7 @@ export class Collectable {
 
             this.collected = true;    // THEN
 
+            this.playSound();
             return true;
         }
         return false;
@@ -37,5 +38,9 @@ export class Collectable {
     
     updateReact(eventName) {
         window.dispatchEvent(new CustomEvent(eventName));
+    }
+
+    playSound() {
+        // In child class override this and play correct sound
     }
 }

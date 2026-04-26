@@ -6,11 +6,13 @@ import titleImage from '../../assets/sprites/ui/title_card.png';
 import SavedScore from "./SavedScore";
 import FirstTimePlaying from "./FirstTimePlaying";
 import { useNavigate } from "react-router";
+import { stopBGMusic } from "../systems/soundsManager";
 
 
 
 
 const MainMenu = () => {
+  stopBGMusic();
     const [componentToShow, setComponentToShow] = useState("")
 
     // const handleChange = ((componentName: string) => {
@@ -18,6 +20,7 @@ const MainMenu = () => {
     //     onSendShownComponent(componentName)
     // })
     const navigate = useNavigate()
+    
 	return (
   <>
     <div style={{ 

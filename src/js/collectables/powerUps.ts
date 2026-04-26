@@ -1,6 +1,7 @@
 import { Animator } from "../systems/animator.js";
 import { Collectable } from "./collectablesBaseClass.js";
 import { Player } from "../entities/player.js";
+import playSound from "../systems/soundsManager";
 
 const speedUpSpriteSheet: HTMLImageElement = new Image();
 speedUpSpriteSheet.src = "/assets/sprites/collectibles/speedUp_sprite_sheet.png";
@@ -22,6 +23,10 @@ export const strengthUpAnimator: Animator = new Animator(strengthUpSpriteSheet, 
 abstract class PowerUp extends Collectable {
     constructor(x: number, y: number, animator: Animator) {
         super(x, y, 50, 50, animator);
+    }
+
+    playSound(): void {
+        playSound("powerUp");
     }
 
     abstract powerUp(player: Player): void;
