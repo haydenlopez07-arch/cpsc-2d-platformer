@@ -1,5 +1,5 @@
 export const Mrows = 60;
-export const Mcols = 650;
+export const Mcols = 700;
 export const tileSize = 32;
 
 // Tiles IDs used throughout the game
@@ -92,20 +92,20 @@ export function createRandomPits(startCol,endCol){
   while (x < endCol - 10){
     x += Math.floor(seededRandom() * 14) + 12;
     if(x >= endCol - 10) break;
-    if(x + 5 >=endCol) break;
-
-    const width = Math.floor(seededRandom() * 2) + 4;
-    const depth = Math.floor(seededRandom() * 3) + 2;
+  
+    const width = Math.floor(seededRandom() * 6) + 3;
+    const depth = Math.floor(seededRandom() * 6) + 2;
 
     for(let i = 0; i < width && x + i < endCol; i++){
       const col = x + i;
-      if  (col >= endCol) break;
-
+     
       for(let d = 0; d <= depth; d++){
         setTile(Mrows - 2 - d, col, TILES.SKY);
       }
-      setTile(Mrows - 1, col, TILES.DIRT);
+
+      setTile(Mrows -1, col, TILES.DIRT);
       setTile(Mrows - 2, col, TILES.SPIKE);
+      
     }
     x += width;
   }
@@ -122,11 +122,17 @@ export function createRandomPlatforms(startCol, endCol){
     const width = Math.floor(seededRandom() * 6) + 4;
     const height = Math.floor(seededRandom() * 3) + 10;
 
+    const hasSpikes = seededRandom() < 0.9
+
     for(let i = 0; i < width && x + i < endCol; i++){
       const col = x +i;
 
       setTile(Mrows - 1 - height, x + i, col, TILES.GRASS);
       setTile(Mrows - height, col, TILES.DIRT);
+
+      if (hasSpikes && i > 0 && i < width -1 && seededRandom() < 0.6){
+        setTile(Mrows - 1 - height, col, TILES.SPIKE);
+      }
     }
     x += width;
   }
