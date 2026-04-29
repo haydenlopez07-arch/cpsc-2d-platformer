@@ -65,21 +65,21 @@ export class BaseRender {
         this.drawMap();
 
         // Hit box/ Text -- Should eventualy be removed 
-        // this.ctx.strokeStyle = "red";
-        // this.ctx.strokeRect(
-        //     this.player.x - this.camera.x,
-        //     this.player.y - this.camera.y,
-        //     this.player.w,
-        //     this.player.h
-        // )
-        // const playerCol = Math.floor(this.player.x / this.tileSize);
-        // const playerRow = this.mapRows - Math.ceil((this.player.y + this.player.h + 0.1) / this.tileSize);
+        this.ctx.strokeStyle = "red";
+        this.ctx.strokeRect(
+            this.player.x - this.camera.x,
+            this.player.y - this.camera.y,
+            this.player.w,
+            this.player.h
+        )
+        const playerCol = Math.floor(this.player.x / this.tileSize);
+        const playerRow = this.mapRows - Math.ceil((this.player.y + this.player.h + 0.1) / this.tileSize);
 
-        // this.ctx.fillStyle = "white";
-        // this.ctx.font = "20px Arial";
-        // this.ctx.textAlign = "left"
-        // this.ctx.fillText(`x: ${this.player.x.toFixed(1)} y: ${this.player.y.toFixed(1)}`, 20, 30);
-        // this.ctx.fillText(`col: ${playerCol} row: ${playerRow}`, 20, 55);
+        this.ctx.fillStyle = "white";
+        this.ctx.font = "20px Arial";
+        this.ctx.textAlign = "left"
+        this.ctx.fillText(`x: ${this.player.x.toFixed(1)} y: ${this.player.y.toFixed(1)}`, 20, 30);
+        this.ctx.fillText(`col: ${playerCol} row: ${playerRow}`, 20, 55);
 
         const mode = this.player.mode || "unarmed";
 

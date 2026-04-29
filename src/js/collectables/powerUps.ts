@@ -84,7 +84,7 @@ class StrengthUp extends PowerUp {
 
 
 export const powerUps: PowerUp[] = [
-    new SpeedUp(300, 1600),
-    new JumpUp(600, 1600),
-    new StrengthUp(7000, 1700)
+    new SpeedUp(4300, 1300),
+    new JumpUp(1800, 1150),
+    new StrengthUp(8000, 1700)
 ];

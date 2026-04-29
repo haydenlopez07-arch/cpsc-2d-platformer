@@ -79,7 +79,7 @@ function InBetweenScreen({
   const [hasSword, setHasSword] = useState(false);
 
   useEffect(() => {
-    // Sync full state (MOST IMPORTANT)
+    
     const state = (window as any).gameState;
 
     if (state) {
@@ -89,7 +89,6 @@ function InBetweenScreen({
         setHasSword(state.hasSword);
     }
 
-    //  Live updates (optional but good)
     const handleHealth = (e: any) => {
       setHp(e.detail.health);
       setMaxHp(e.detail.maxHealth);

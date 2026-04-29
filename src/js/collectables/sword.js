@@ -30,5 +30,5 @@ class Sword extends Collectable {
 
 export const sword = [
     //NOTE this is a placeholder spot for the sword. The player will pick the sword up once they finish the first "platform/spikes" section.
-    new Sword(350, 1730)
+    new Sword(6300, 1430)
 ]

@@ -29,7 +29,7 @@ export class LevelOneMap extends BaseRender {
             portalFrames.push(`/assets/sprites/portals/portal_frame_${i}.png`);
         }
 
-        this.portal = new Portal(20600, 1615, portalFrames);
+        this.portal = new Portal(22000, 1615, portalFrames);
 
         this.background = new Image();
         const backgroundSources = [
