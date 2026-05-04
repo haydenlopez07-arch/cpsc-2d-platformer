@@ -88,3 +88,9 @@ export const powerUps: PowerUp[] = [
     new JumpUp(1800, 1150),
     new StrengthUp(8000, 1700)
 ];
+
+export const bossPowerUps: PowerUp[] = [
+    new SpeedUp(1200, 700),
+    new JumpUp(1400, 500),
+    new StrengthUp(1600, 500)
+]

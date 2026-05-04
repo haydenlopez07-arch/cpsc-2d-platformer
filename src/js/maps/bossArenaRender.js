@@ -5,6 +5,9 @@ import {
     Mrows, Mcols, tileSize, map,
     tileLocation, TILES
 } from "./bossArena.js";
+import { bossCoins } from "../collectables/coins.js";
+import { bossHearts } from "../collectables/hearts";
+import { bossPowerUps } from "../collectables/powerUps.ts";
 
 export const boss = new Boss(40 * tileSize, 3000);
 ;
@@ -22,6 +25,8 @@ export class BossArena extends BaseRender {
             "/assets/sprites/tiles/boss-tiles-2.png",
         );
 
+        
+
         this.background = new Image();
         this.background.src = "/assets/backgrounds/bg-boss-4.png";
 
@@ -29,6 +34,10 @@ export class BossArena extends BaseRender {
         this.throne.src = "/assets/sprites/tiles/throne.png";
 
         this.tileData = this.createTiles();
+
+        this.bossCoins = bossCoins;
+        this.bossHearts = bossHearts;
+        this.bossPowerUps = bossPowerUps;
         
         enemies.push(boss);
     }
@@ -114,6 +123,30 @@ export class BossArena extends BaseRender {
             boss.w,
             boss.h
         );
+
+        bossCoins.forEach(coin => {
+            coin.draw(this.ctx, this.camera);
+            if (coin.checkCollision(this.player)) {
+                this.player.collectedCoins++;
+                coin.updateReact('coinCollected')
+            }
+        });
+
+        bossHearts.forEach(heart => {
+            heart.draw(this.ctx, this.camera);
+            if (heart.checkCollision(this.player)) {
+                heal(this.player, 1);
+                heart.updateReact('heartCollected')
+            }
+        });
+
+        bossPowerUps.forEach(powerUp => {
+            powerUp.draw(this.ctx, this.camera, true);
+            if (powerUp.checkCollision(this.player)) {
+                powerUp.powerUp(this.player);
+                setTimeout( () => powerUp.powerRevert(this.player), 7500);
+            }
+        });
     }
 
     createTiles(){
