@@ -105,6 +105,14 @@ export function vertical(entity) {
     }
 }
 
+function hazBox(entity){
+    return {
+        x: entity.x + 3,
+        y: entity.y + 2,
+        w: entity.w - 3,
+        h: entity.h - 2
+    }
+}
 
 export function checkHazard(entity) {
     if (isGodModeEnabled()) {
