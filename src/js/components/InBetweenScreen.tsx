@@ -82,6 +82,7 @@ function InBetweenScreen({
     
     const state = (window as any).gameState;
 
+    console.log(state)
     if (state) {
         setHp(state.health);
         setMaxHp(state.maxHealth);
@@ -142,12 +143,12 @@ function InBetweenScreen({
         </div>
 
         {/* Shop */}
-        <div style={styles.section}>
+        {/* <div style={styles.section}>
           SHOP
           <div style={{ ...styles.button, ...styles.disabled }}>
             Coming Soon
           </div>
-        </div>
+        </div> */}
 
         {/* Actions */}
         <div style={styles.buttonRow}>

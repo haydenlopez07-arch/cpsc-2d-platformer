@@ -41,7 +41,7 @@ function CharacterSelect() {
       <div className="retro-wrap">
         <div className="retro-title">SELECT YOUR CHARACTER</div>
         <div className="retro-sub">— equip owned skins —</div>
-        <div className="char-grid">
+        <div className="char-grid three-columns">
           {CHARACTER_OPTIONS.map((entry) => {
             const owned = ownedSkins.includes(entry.skinName);
 

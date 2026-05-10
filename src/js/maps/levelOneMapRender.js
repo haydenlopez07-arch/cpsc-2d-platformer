@@ -148,10 +148,10 @@ export class LevelOneMap extends BaseRender {
 
                 const x = hit.tarX;
                 const y = hit.tarY
-                this.ctx.drawImage(this.playerHitIndicator, 
-                    0, 0, 1536, 1024, 
-                    x - this.camera.x, 
-                    y - this.camera.y, 
+                this.ctx.drawImage(this.playerHitIndicator,
+                    0, 0, 1536, 1024,
+                    x - this.camera.x,
+                    y - this.camera.y,
                     80, 80);
             }
 
@@ -160,14 +160,14 @@ export class LevelOneMap extends BaseRender {
 
                 const x = hit.tarX;
                 const y = hit.tarY
-                this.ctx.drawImage(this.enemyHitIndicator, 
-                    0, 0, 1536, 1024, 
-                    x - this.camera.x, 
-                    y - this.camera.y + 20, 
+                this.ctx.drawImage(this.enemyHitIndicator,
+                    0, 0, 1536, 1024,
+                    x - this.camera.x,
+                    y - this.camera.y + 20,
                     80, 80);
             }
 
-            hit.lifeTime -= 1/60;
+            hit.lifeTime -= 1 / 60;
             hit.tarY -= hit.vy
         }
 
@@ -188,7 +188,7 @@ export class LevelOneMap extends BaseRender {
             this.portal.update(1 / 60);
             this.portal.render(this.ctx, this.camera);
 
-    
+
             const p = this.player;
 
             if (
@@ -197,7 +197,7 @@ export class LevelOneMap extends BaseRender {
                 p.y < this.portal.y + this.portal.height &&
                 p.y + p.h > this.portal.y
             ) {
-                
+
                 this.ctx.fillStyle = "Black";
                 this.ctx.font = "30px Arial Bold";
                 this.ctx.textAlign = "center";
@@ -211,7 +211,7 @@ export class LevelOneMap extends BaseRender {
                         health: this.player.health,
                         maxHealth: this.player.maxHealth,
                         coins: this.player.collectedCoins,
-                        hasSword: this.player.hasSword || false
+                        hasSword: this.player.mode == "sword" ? true : false
                     };
 
                     window.dispatchEvent(new Event("openInBetweenScreen"));
@@ -250,6 +250,7 @@ export class LevelOneMap extends BaseRender {
         sword.forEach(sword => {
             sword.draw(this.ctx, this.camera)
             if (sword.checkCollision(this.player)) {
+                // sword.collected = true
             }
         });
 
@@ -257,7 +258,7 @@ export class LevelOneMap extends BaseRender {
             powerUp.draw(this.ctx, this.camera, true);
             if (powerUp.checkCollision(this.player)) {
                 powerUp.powerUp(this.player);
-                setTimeout( () => powerUp.powerRevert(this.player), 7500);
+                setTimeout(() => powerUp.powerRevert(this.player), 7500);
             }
         });
 

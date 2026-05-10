@@ -1,6 +1,5 @@
 body {
   margin: 0;
-  overflow: hidden;
   background-image: url("../assets/backgrounds/level1/mario_lighter.png");
   /* background-size: cover; */
   /* background-position: center; */
@@ -16,6 +15,7 @@ canvas {
   position: relative;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 }
 
 .hud-overlay {

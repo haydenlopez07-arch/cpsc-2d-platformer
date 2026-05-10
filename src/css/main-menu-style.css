@@ -6,20 +6,11 @@
   background-size: cover;
 }
 
+.root {
+  overflow-y: hidden;
+}
+
 .transparent-edges {
-  /* Could set the background to an image if you wanted to */
-
-  /* background-image: url("");
-    background-repeat: repeat;
-    background-attachment: fixed;
-    background-size: cover; */
-
-  /* background: linear-gradient(
-    90deg, 
-    rgba(33, 40, 46, 1) 10%, 
-    rgba(47, 47, 56, 1) 41%, 
-    rgba(64, 65, 74, 1) 74%); */
-
   background: linear-gradient(
     90deg,
     rgb(47, 48, 53) 0%,
