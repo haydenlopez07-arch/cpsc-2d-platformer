@@ -8,6 +8,7 @@ import {
 import { bossCoins } from "../collectables/coins.js";
 import { bossHearts } from "../collectables/hearts";
 import { bossPowerUps } from "../collectables/powerUps.ts";
+import { heal } from "../systems/damageSystem";
 
 export const boss = new Boss(40 * tileSize, 3000);
 ;

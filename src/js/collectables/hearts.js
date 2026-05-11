@@ -23,20 +23,25 @@ export const hearts = [
     new Heart(3600, 1200),
     new Heart(4100, 1410),
     new Heart(4800, 1380),
-    new Heart(5600, 1210),
-    new Heart(6900, 1380),
-    new Heart(7300, 1600),
-    new Heart(8100, 1600),
+    new Heart(5600, 1610),
+    new Heart(6900, 1680),
+    new Heart(7300, 1620),
+    new Heart(8100, 1580),
     new Heart(9100, 1600),
-    new Heart(10100, 1600),
-    new Heart(16100, 1220),
-    new Heart(17500, 1620),
-    new Heart(18100, 1320),
-    new Heart(19100, 1700),
-    new Heart(20000, 1600),
-    new Heart(20300, 1500),
-    new Heart(20800, 1420),
-    new Heart(21200, 1600)
+    new Heart(10100, 1700),
+    new Heart(12200, 1290),
+    new Heart(13500, 1420)
+
+];
+
+export const bossHearts = [
+    new Heart(650, 4500),
+    new Heart(1500, 4500),
+    new Heart(2700, 4390),
+    new Heart(4100, 4440),
+    new Heart(5300, 4510),
+    new Heart(6500, 4585),
+    new Heart(8800, 4400),
 
 ];
 
