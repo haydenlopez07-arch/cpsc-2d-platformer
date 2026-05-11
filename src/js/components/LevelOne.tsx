@@ -7,7 +7,7 @@ import { saveLevelResult } from "../systems/scoresManager";
 import { startGame } from "../main";
 import { useNavigate } from "react-router";
 import { startBGMusic } from "../systems/soundsManager";
-
+import SettingsScreen from "./SettingsPage";
 
 interface LevelEndedDetail {
   reason: "death" | "victory";
@@ -22,6 +22,8 @@ function LevelOne() {
   const hasHandledEndRef = useRef(false);
   const [showInBetweenScreen, setShowInBetweenScreen] = useState(false);
   const [levelResult, setLevelResult] = useState<LevelEndedDetail | null>(null);
+  const [showSettings, setShowSettings] = useState(false);
+  const [isGodModeOn, setGodMode] = useState(false);
 
   useEffect(() => {
     const canvas = document.getElementById("game") as HTMLCanvasElement;
@@ -34,6 +36,12 @@ function LevelOne() {
       setShowInBetweenScreen(true);
     };
 
+    const settingsHandler = (event: KeyboardEvent) => {
+      if (event.code === "Backquote" && !event.repeat) {
+        setShowSettings(prev => !prev);
+      }
+    };
+
     window.addEventListener("openInBetweenScreen", handler);
 
     if (canvas && !gameStartedRef.current) {
@@ -44,11 +52,14 @@ function LevelOne() {
     window.addEventListener("click", startBGMusic);
     window.addEventListener("keydown", startBGMusic);
 
+    window.addEventListener("keydown", settingsHandler);
+
     return () => {
       window.removeEventListener("openInBetweenScreen", handler);
       
       window.removeEventListener("click", startBGMusic);
       window.removeEventListener("keydown", startBGMusic);
+      window.removeEventListener("keydown", settingsHandler);
     };
   }, []);
 
@@ -115,6 +126,13 @@ function LevelOne() {
         <div className="hud-overlay">
           <DungeonHUD />
         </div>
+        {showSettings && (
+          <SettingsScreen
+          isGodModeOn={isGodModeOn}
+          setGodMode={setGodMode}
+          setShowSettings={setShowSettings}
+          />
+        )}
         {showInBetweenScreen && (
           <InBetweenScreen
             onEnterBoss={handleEnterBoss}

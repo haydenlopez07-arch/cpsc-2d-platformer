@@ -31,6 +31,9 @@ let gameLoopStarted = false;
 
 // temporary input flag for attacks
 let attackPressed = false;
+export function setAttackPressed() {
+  attackPressed = !attackPressed;
+}
 
 function emitPlayerHealthChanged(): void {
   window.dispatchEvent(
@@ -57,17 +60,6 @@ function syncPlayerHealthHud(force = false): void {
 }
 
 window.addEventListener("keydown", (event: KeyboardEvent) => {
-  if (event.code === "Backquote" && !event.repeat) {
-    const enabled = toggleGodMode();
-    console.log(`God mode ${enabled ? "enabled" : "disabled"}`);
-    return;
-  }
-
-  if (event.code === "Backslash" && !event.repeat) {
-    window.dispatchEvent(new Event("teleportToBossPortal"));
-    return;
-  }
-
   if (event.code === "KeyF" && !event.repeat) {
     attackPressed = true;
   }

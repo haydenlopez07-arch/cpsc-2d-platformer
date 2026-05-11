@@ -72,11 +72,11 @@ const MainMenu = () => {
                       Shop
                       <i className="bi bi-cart2 ps-1"></i>
                     </button>
-                    <button className=" btn-custom-color btn  rounded-1 mb-3 fs-4 fs-custom-sm">
+                    {/* <button className=" btn-custom-color btn  rounded-1 mb-3 fs-4 fs-custom-sm">
                       <i className="bi bi-suit-diamond-fill pe-1"></i>
                       Settings
                       <i className="bi bi-suit-diamond-fill ps-1"></i>
-                    </button>
+                    </button> */}
                     <button onClick={() => { navigate("/credits") }} className=" btn-custom-color btn  rounded-1 mb-3 fs-4 fs-custom-sm">
                       <i className="bi bi-suit-diamond-fill pe-1"></i>
                       Credits
