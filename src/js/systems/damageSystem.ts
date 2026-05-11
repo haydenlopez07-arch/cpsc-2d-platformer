@@ -199,7 +199,7 @@ export function removeEnemy(enemies: Enemy[]): void {
 
 export function removeEnemyInPit(enemies: Enemy[]): void {
   for (let i = enemies.length - 1; i >= 0; i--) {
-    if (enemies[i].y > 1750) {
+    if (enemies[i].canFallInPit && enemies[i].y > 1750) {
       dropCoinOnDeath(enemies[i]);
       enemies.splice(i, 1);
     }

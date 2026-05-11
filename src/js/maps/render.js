@@ -1,5 +1,6 @@
 import { LevelOneMap } from "./levelOneMapRender.js";
-import { BossArena } from "./bossArenaRender.js";
+import { BossArena, boss } from "./bossArenaRender.js";
+import { enemies } from "../entities/enemy";
 
 let levelOne;
 let bossArena;
@@ -40,6 +41,10 @@ window.addEventListener("teleportToBossPortal", () => {
 });
 
 window.addEventListener("enterBoss", () => {
+    if (!enemies.includes(boss)) {
+        enemies.push(boss);
+    }
+
     currentLevel = 1;
     bossArena.setPlayerPos(540, 150);
 });

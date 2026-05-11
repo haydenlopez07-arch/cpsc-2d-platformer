@@ -1,5 +1,4 @@
 import { Boss } from "../entities/boss";
-import { enemies } from "../systems/damageSystem";
 import { BaseRender } from "./renderBaseClass.js";
 import {
     Mrows, Mcols, tileSize, map,
@@ -26,7 +25,7 @@ export class BossArena extends BaseRender {
             "/assets/sprites/tiles/boss-tiles-2.png",
         );
 
-        
+
 
         this.background = new Image();
         this.background.src = "/assets/backgrounds/bg-boss-4.png";
@@ -39,8 +38,8 @@ export class BossArena extends BaseRender {
         this.bossCoins = bossCoins;
         this.bossHearts = bossHearts;
         this.bossPowerUps = bossPowerUps;
-        
-        enemies.push(boss);
+
+        this.hasDispatchedBossDefeated = false;
     }
 
     drawMap() {
@@ -54,11 +53,11 @@ export class BossArena extends BaseRender {
             this.ctx.drawImage(this.background, Math.floor(x), 0, drawWidth, this.canvas.height);
         }
 
-        const startCol = Math.max(0, Math.floor(this.camera.x / tileSize)-2);
-        const endCol = Math.min(Mcols, Math.ceil((this.camera.x + this.canvas.width) / tileSize)+2);
+        const startCol = Math.max(0, Math.floor(this.camera.x / tileSize) - 2);
+        const endCol = Math.min(Mcols, Math.ceil((this.camera.x + this.canvas.width) / tileSize) + 2);
 
-        const startRow = Math.max(0, Math.floor(this.camera.y / tileSize)-2);
-        const endRow = Math.min(Mrows, Math.ceil((this.camera.y + this.canvas.height) / tileSize)+2);
+        const startRow = Math.max(0, Math.floor(this.camera.y / tileSize) - 2);
+        const endRow = Math.min(Mrows, Math.ceil((this.camera.y + this.canvas.height) / tileSize) + 2);
 
         for (let y = startRow; y < endRow; y++) {
             for (let x = startCol; x < endCol; x++) {
@@ -106,24 +105,29 @@ export class BossArena extends BaseRender {
             550,
             750,
             25 * this.tileSize - this.camera.x,
-            (Mrows-16) * this.tileSize - this.camera.y,
-            16*40,
-            16*40
+            (Mrows - 16) * this.tileSize - this.camera.y,
+            16 * 40,
+            16 * 40
         );
     }
 
     render() {
         super.render();
 
-        boss.update(1 / 60, this.player);
+        if (!boss.isDead) {
+            boss.update(1 / 60, this.player);
 
-        boss.animator.draw(
-            this.ctx,
-            boss.x - this.camera.x,
-            boss.y - this.camera.y,
-            boss.w,
-            boss.h
-        );
+            boss.animator.draw(
+                this.ctx,
+                boss.x - this.camera.x,
+                boss.y - this.camera.y,
+                boss.w,
+                boss.h
+            );
+        } else if (!this.hasDispatchedBossDefeated) {
+            this.hasDispatchedBossDefeated = true;
+            window.dispatchEvent(new Event("bossDefeated"));
+        }
 
         bossCoins.forEach(coin => {
             coin.draw(this.ctx, this.camera);
@@ -145,12 +149,12 @@ export class BossArena extends BaseRender {
             powerUp.draw(this.ctx, this.camera, true);
             if (powerUp.checkCollision(this.player)) {
                 powerUp.powerUp(this.player);
-                setTimeout( () => powerUp.powerRevert(this.player), 7500);
+                setTimeout(() => powerUp.powerRevert(this.player), 7500);
             }
         });
     }
 
-    createTiles(){
+    createTiles() {
         const og = tileLocation.tileSize;
 
         return {
@@ -283,18 +287,18 @@ export class BossArena extends BaseRender {
             [TILES.TREE1]: {
                 imgSrc: this.tileSet,
                 srcLoc: tileLocation.tree1,
-                w: 16*4,
-                h: 16*4.5,
-                drawW: 16*10,
-                drawH: 16*10
+                w: 16 * 4,
+                h: 16 * 4.5,
+                drawW: 16 * 10,
+                drawH: 16 * 10
             },
             [TILES.TREE2]: {
                 imgSrc: this.tileSet,
                 srcLoc: tileLocation.tree2,
-                w: 16*4,
-                h: 16*4,
-                drawW: 16*10,
-                drawH: 16*10
+                w: 16 * 4,
+                h: 16 * 4,
+                drawW: 16 * 10,
+                drawH: 16 * 10
             },
             [TILES.CHAIR]: {
                 imgSrc: this.throne,

@@ -12,6 +12,7 @@ bossSprite.src =
 
 export class Boss extends Enemy {
   attackCooldownTimer = 0;
+  attackCooldown = ENEMY_DEFAULTS.combat.attackCooldown * 1.5;
   attackRange = 110;
   followRange = 320;
   attackWidth = 140;
@@ -27,11 +28,13 @@ export class Boss extends Enemy {
   constructor(x: number, y: number) {
     super(x, y);
 
+    this.canFallInPit = false;
+
     this.w = ENEMY_DEFAULTS.size.w * 4;
     this.h = ENEMY_DEFAULTS.size.h * 3;
 
-    this.health = ENEMY_DEFAULTS.combat.health * 20;
-    this.maxHealth = ENEMY_DEFAULTS.combat.maxHealth * 20;
+    this.health = ENEMY_DEFAULTS.combat.health * 6;
+    this.maxHealth = ENEMY_DEFAULTS.combat.maxHealth * 6;
 
     this.damage = ENEMY_DEFAULTS.combat.damage;
     this.moveSpeed = ENEMY_DEFAULTS.movement.followSpeed * 0.8;
@@ -82,7 +85,7 @@ export class Boss extends Enemy {
       if (distance <= this.attackRange) {
         if (this.attackCooldownTimer <= 0 && this.hasExitedAttackRange) {
           this.isAttacking = true;
-          this.attackCooldownTimer = this.attackCooldownTimer;
+          this.attackCooldownTimer = this.attackCooldown;
           this.attackHasHit = false;
           this.attackLockTimer = 0.4;
           this.hasExitedAttackRange = false;

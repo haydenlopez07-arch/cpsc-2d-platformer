@@ -45,6 +45,6 @@ export const bossHearts = [
 
 ];
 
-export const bossHearts = [
-    new Heart(1200, 520)
-];
+// export const bossHearts = [
+//     new Heart(1200, 520)
+// ];
