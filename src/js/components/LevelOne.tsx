@@ -25,6 +25,14 @@ function LevelOne() {
   const [showSettings, setShowSettings] = useState(false);
   const [isGodModeOn, setGodMode] = useState(false);
 
+  const [isSpeedOn, setSpeedMode] = useState(false);
+  const [isJumpOn, setJumpMode] = useState(false);
+  const [isStrengthOn, setStrengthMode] = useState(false);
+
+  const [speedSwitch, setSpeedSwitch] = useState(false);
+  const [jumpSwitch, setJumpSwitch] = useState(false);
+  const [strengthSwitch, setStrengthSwitch] = useState(false);
+
   useEffect(() => {
     const canvas = document.getElementById("game") as HTMLCanvasElement;
 
@@ -131,6 +139,20 @@ function LevelOne() {
           isGodModeOn={isGodModeOn}
           setGodMode={setGodMode}
           setShowSettings={setShowSettings}
+          
+          isSpeedOn={isSpeedOn}
+          setSpeedMode={setSpeedMode}
+          isJumpOn={isJumpOn}
+          setJumpMode={setJumpMode}
+          isStrengthOn={isStrengthOn}
+          setStrengthMode={setStrengthMode}
+
+          speedSwitch={speedSwitch}
+          setSpeedSwitch={setSpeedSwitch}
+          jumpSwitch={jumpSwitch}
+          setJumpSwitch={setJumpSwitch}
+          strengthSwitch={strengthSwitch}
+          setStrengthSwitch={setStrengthSwitch}
           />
         )}
         {showInBetweenScreen && (
