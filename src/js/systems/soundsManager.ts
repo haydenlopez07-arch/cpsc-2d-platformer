@@ -19,7 +19,7 @@ const sounds: Record<string, HTMLAudioElement> = {
   punch: new Audio("../../assets/audio/sfx/punch.wav"),
   hurt: new Audio("../../assets/audio/sfx/hurt.wav"),
   portal: new Audio("../../assets/audio/sfx/8_bit_mystery.wav"),
-  win: new Audio("../../assets/audio/sfx/8_bit_complete.wav"), // When the boss is made, add to his death.
+  win: new Audio("../../assets/audio/sfx/8_bit_level_complete.wav"), // When the boss is made, add to his death.
   loose: new Audio("../../assets/audio/sfx/8_bit_defeated.wav")
 };
 
@@ -38,7 +38,7 @@ sounds.hurt.volume = 0.4;
 sounds.sword.volume = .5;
 
 function playSound(name: string): void {
-  console.log("Played:", name);
+  // console.log("Played:", name);
   if (name === "run") {
     playRun();
     return;

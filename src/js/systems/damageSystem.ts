@@ -16,7 +16,7 @@ type HitIndicatorLoc = {
 };
 export const hitLocations: HitIndicatorLoc[] = [];
 
-function addHitLoc(target: Enemy | Player, playerOrEnemy: "player" | "enemy") {
+export function addHitLoc(target: Enemy | Player, playerOrEnemy: "player" | "enemy") {
   hitLocations.push({
     tarX: target.x,
     tarY: target.y - target.w,

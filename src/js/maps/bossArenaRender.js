@@ -8,6 +8,7 @@ import { bossCoins } from "../collectables/coins.js";
 import { bossHearts } from "../collectables/hearts";
 import { bossPowerUps } from "../collectables/powerUps.ts";
 import { heal } from "../systems/damageSystem";
+import { hitLocations } from "../systems/damageSystem";
 
 export const boss = new Boss(40 * tileSize, 3000);
 ;
@@ -40,6 +41,12 @@ export class BossArena extends BaseRender {
         this.bossPowerUps = bossPowerUps;
 
         this.hasDispatchedBossDefeated = false;
+
+        this.playerHitIndicator = new Image();
+        this.playerHitIndicator.src = "/assets/sprites/player/player_got_hit.png"
+
+        this.enemyHitIndicator = new Image();
+        this.enemyHitIndicator.src = "/assets/sprites/enemies/enemy_got_hit.png"
     }
 
     drawMap() {
@@ -145,6 +152,42 @@ export class BossArena extends BaseRender {
         this.ctx.restore();
     }
 
+    drawHitIndicator() {
+        for (const hit of hitLocations) {
+            if (hit.type === "player") {
+                if (!this.playerHitIndicator.complete || this.playerHitIndicator.naturalWidth === 0) return;
+
+                const x = hit.tarX;
+                const y = hit.tarY - 50;
+                this.ctx.drawImage(this.playerHitIndicator,
+                    0, 0, 1536, 1024,
+                    x - this.camera.x,
+                    y - this.camera.y,
+                    120, 120);
+            }
+
+            if (hit.type === "enemy") {
+                if (!this.enemyHitIndicator.complete || this.enemyHitIndicator.naturalWidth === 0) return;
+                const x = hit.tarX;
+                const y = hit.tarY + 200;
+                this.ctx.drawImage(this.enemyHitIndicator,
+                    0, 0, 1536, 1024,
+                    x - this.camera.x,
+                    y - this.camera.y + 20,
+                    120, 120);
+            }
+
+            hit.lifeTime -= 1 / 60;
+            hit.tarY -= hit.vy
+        }
+
+        for (let i = hitLocations.length - 1; i >= 0; i--) {
+            if (hitLocations[i].lifeTime <= 0) {
+                hitLocations.splice(i, 1);
+            }
+        }
+    }
+
     render() {
         super.render();
 
@@ -186,6 +229,8 @@ export class BossArena extends BaseRender {
                 setTimeout(() => powerUp.powerRevert(this.player), 7500);
             }
         });
+
+        this.drawHitIndicator();
     }
 
     createTiles() {

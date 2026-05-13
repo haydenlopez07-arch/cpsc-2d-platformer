@@ -1,4 +1,5 @@
 import React from "react";
+import playSound from "../systems/soundsManager";
 
 interface LevelEndScreenProps {
   reason: "death" | "victory";
@@ -80,6 +81,7 @@ function LevelEndScreen({
 }: LevelEndScreenProps) {
   console.log("LevelEndScreen received timeAlive:", timeAlive, "type:", typeof timeAlive);
   const title = reason === "victory" ? "VICTORY" : "YOU WERE DEFEATED";
+  if (reason === "victory") playSound("win");
 
   return (
     <div style={styles.overlay}>

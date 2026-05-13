@@ -2,9 +2,10 @@ import { Enemy } from "./enemy";
 import { Animator } from "../systems/animator";
 import { ENEMY_DEFAULTS } from "../config/enemyConfig";
 import type { Player } from "./player";
-import { dealDamage } from "../systems/damageSystem";
+import { addHitLoc, dealDamage } from "../systems/damageSystem";
 import { isGodModeEnabled } from "../systems/godMode";
 import { applyGravity, clampFallSpeed, integrate } from "../systems/physics";
+import playSound from "../systems/soundsManager";
 
 const bossSprite = new Image();
 bossSprite.src =
@@ -143,12 +144,15 @@ export class Boss extends Enemy {
       this.isAttacking &&
       !this.attackHasHit
     ) {
+      playSound("splat");
+      playSound("crunch");
       const direction = dx < 0 ? -1 : 1;
 
       const knockbackX = direction * 650;
       const knockbackY = -100;
 
       dealDamage(player, this.damage, knockbackX, knockbackY);
+      addHitLoc(player, "player");
       player.invulnTimer = player.invulnTime;
 
       this.attackHasHit = true;
